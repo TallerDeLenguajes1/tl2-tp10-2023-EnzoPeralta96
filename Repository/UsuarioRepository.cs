@@ -1,6 +1,6 @@
 using System.Data.SqlClient;
 using System.Data.SQLite;
-using Models.Usuario;
+using tl2_tp10_2023_EnzoPeralta96.Models;
 namespace RepositorioUsuario;
 
 public class UsuarioRepository : IUsuarioRepository

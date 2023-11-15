@@ -1,4 +1,4 @@
-using Models.Tarea;
+using tl2_tp10_2023_EnzoPeralta96.Models;
 namespace TareaRepositorio;
 public interface ITareaRepository
 {

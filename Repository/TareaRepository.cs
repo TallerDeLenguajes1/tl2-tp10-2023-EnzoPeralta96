@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
-using Models.Tarea;
+using tl2_tp10_2023_EnzoPeralta96.Models;
 using System.Data.SQLite;
 namespace TareaRepositorio;
 
@@ -121,7 +121,7 @@ public class TareaRepository : ITareaRepository
                     tarea.EstadoTarea = (Estado)Enum.Parse(typeof(Estado), reader["estado"].ToString());
                     tarea.Descripcion = reader["descripcion"].ToString();
                     tarea.Color = reader["color"].ToString();
-                    tarea.Id_usuario_asignado = Convert.ToInt32(reader["id_usuario_asignado"]);
+                    tarea.Id_usuario_asignado = reader["id_usuario_asignado"] != DBNull.Value ? Convert.ToInt32(reader["id_usuario_asignado"]) : (int?)null;
                 }
             }
             conexion.Close();

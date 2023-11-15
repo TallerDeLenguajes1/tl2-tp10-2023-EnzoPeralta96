@@ -1,0 +1,13 @@
+@model Tarea
+
+
+<form asp-controller="Tarea" asp-action="AsignarUser">
+    <div class="form-group">
+        <input hidden asp-for="@Model.Id">
+
+        <label asp-for="@Model.Id_usuario_asignado">Id Usuario</label>
+        <input asp-for="@Model.Id_usuario_asignado" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Enviar</button>
+</form>

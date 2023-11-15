@@ -1,4 +1,4 @@
-namespace Models.Tarea;
+namespace tl2_tp10_2023_EnzoPeralta96.Models;
 
 public enum Estado
 {

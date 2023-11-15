@@ -1,6 +1,6 @@
 namespace TableroRepositorio;
 using System.Data.SQLite;
-using Models.Tablero;
+using tl2_tp10_2023_EnzoPeralta96.Models;
 
 public class TableroRepository : ITableroRepository
 {
