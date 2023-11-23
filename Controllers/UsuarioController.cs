@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using RepositorioUsuario;
+using ViewModels;
 
 using tl2_tp10_2023_EnzoPeralta96.Models;
 namespace tl2_tp10_2023_EnzoPeralta96.Controllers;
@@ -10,6 +11,7 @@ public class UsuarioController : Controller
     private readonly ILogger<UsuarioController> _logger;
     private UsuarioRepository _userRepository;
 
+
     public UsuarioController(ILogger<UsuarioController> logger)
     {
         _logger = logger;
@@ -18,7 +20,8 @@ public class UsuarioController : Controller
 
     public IActionResult Index()
     {
-        var listUsers = _userRepository.GetAllUsuarios();
+        if (!IsLogged()) return RedirectToRoute(new { controller = "Login", action = "Index" });
+        var listUsers = _userRepository.GetAllUsers();
         return View(listUsers);
     }
 
@@ -26,13 +29,18 @@ public class UsuarioController : Controller
     [HttpGet]
     public IActionResult CreateUser()
     {
-        return View(new Usuario());
+        if (!IsLogged()) return RedirectToRoute(new { controller = "Login", action = "Index" });
+        if (!IsAdmin()) return RedirectToAction("Index");
+        return View(new CreateUserViewModels());
     }
 
     [HttpPost]
-    public IActionResult CreateUser(Usuario user)
+    public IActionResult CreateUser(CreateUserViewModels user)
     {
-        _userRepository.Create(user);
+        if (!IsLogged()) return RedirectToRoute(new { controller = "Login", action = "Index" });
+        if (!ModelState.IsValid) return RedirectToAction("Index");
+        if (!IsAdmin()) return RedirectToAction("Index");
+        _userRepository.Create(new Usuario(user));
         return RedirectToAction("Index");
     }
 
@@ -40,21 +48,38 @@ public class UsuarioController : Controller
     [HttpGet]
     public IActionResult UpdateUser(int idUsuario)
     {
+        if (!IsLogged()) return RedirectToRoute(new { controller = "Login", action = "Index" });
+        if (!IsAdmin()) return RedirectToAction("Index");
+
         var user = _userRepository.GetUsuarioById(idUsuario);
-        return View(user);
+
+        if (user != null)
+        {
+            return View(new UpdateUserViewModels(user.Id));
+        }
+        else
+        {
+            return RedirectToAction("Index");
+        }
+
     }
 
 
-   [HttpPost]
-    public IActionResult UpdateUser(Usuario user)
+    [HttpPost]
+    public IActionResult UpdateUser(UpdateUserViewModels user)
     {
-        _userRepository.Update(user.Id, user);
+        if (!IsLogged()) return RedirectToRoute(new { controller = "Login", action = "Index" });
+        if (!ModelState.IsValid) return RedirectToAction("Index");
+        if (!IsAdmin()) return RedirectToAction("Index");
+        _userRepository.Update(user.Id, new Usuario(user));
         return RedirectToAction("Index");
     }
 
-    
+
     public IActionResult DeleteUser(int idUsuario)
     {
+        if (!IsLogged()) return RedirectToRoute(new { controller = "Login", action = "Index" });
+        if (!IsAdmin()) return RedirectToAction("Index");
         _userRepository.DeleteUsuarioById(idUsuario);
         return RedirectToAction("Index");
     }
@@ -70,4 +95,12 @@ public class UsuarioController : Controller
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
 
+    private bool IsAdmin()
+    {
+        return HttpContext.Session != null && HttpContext.Session.GetString("Rol") == "admin";
+    }
+    private bool IsLogged()
+    {
+        return HttpContext.Session != null && (HttpContext.Session.GetString("Rol") == "admin" || HttpContext.Session.GetString("Rol") == "operador");
+    }
 }

@@ -20,6 +20,8 @@
         <tr>
             <th hidden>ID</th>
             <th>Nombre</th>
+            <th>Contraseña</th>
+            <th>Rol</th>
             <th></th>
         </tr>
     </thead>
@@ -29,6 +31,8 @@
             <tr>
                 <td hidden>@usuario.Id</td>
                 <td>@usuario.Nombre_de_usuario</td>
+                <td>@usuario.Password</td>
+                <td>@usuario.Rol</td>
                 <td>
                     <a asp-controller="Usuario" asp-action="UpdateUser" asp-route-idUsuario="@usuario.Id">Editar</a>
                     <a asp-controller="Usuario" asp-action="DeleteUser" asp-route-idUsuario="@usuario.Id"

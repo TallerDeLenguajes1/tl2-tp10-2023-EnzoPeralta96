@@ -4,13 +4,17 @@
 <form asp-controller="Tarea" asp-action="CreateTarea">
     <div class="form-group">
         <label asp-for="@Model.Id_tablero" hidden>Tablero:</label>
-        <input asp-for="@Model.Id_tablero=1" class="form-control" hidden />
+        <input asp-for="@Model.Id_tablero" class="form-control" hidden />
+
         <label asp-for="@Model.Nombre">Nombre:</label>
         <input asp-for="@Model.Nombre" class="form-control" />
+
         <label asp-for="@Model.EstadoTarea">Estado:</label>
         <select asp-for="@Model.EstadoTarea" asp-items="Html.GetEnumSelectList<Estado>()" class="form-control"></select>
+
         <label asp-for="@Model.Descripcion">Descripcion:</label>
         <input asp-for="@Model.Descripcion" class="form-control" />
+
         <label asp-for="@Model.Color">Color:</label>
         <input asp-for="@Model.Color" class="form-control" />
     </div>

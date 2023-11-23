@@ -1,11 +1,27 @@
-@model Usuario
+@model ViewModels.CreateUserViewModels;
 
 
 <form asp-controller="Usuario" asp-action="CreateUser">
     <div class="form-group">
-        <label asp-for="@Model.Nombre_de_usuario">Usuario:</label>
-        <input asp-for="@Model.Nombre_de_usuario" class="form-control" />
+        <label asp-for="@Model.Name">Nombre:</label>
+        <input asp-for="@Model.Name" class="form-control" />
+        <span asp-validation-for="@Model.Name" class="text-danger"></span>
+        
+        <label asp-for="@Model.Rol">Rol Usuario</label>
+        <select asp-for="@Model.Rol" asp-items="Html.GetEnumSelectList<tl2_tp10_2023_EnzoPeralta96.Models.RolUsuario>()" class="form-control">
+            <option value="">-- Seleccionar --</option>
+        </select>
+        <span asp-validation-for="@Model.Rol" class="text-danger"></span>
+
+        <label asp-for="@Model.Password">Contraseña</label>
+        <input asp-for="@Model.Password class="form-control">
+        <span asp-validation-for="@Model.Password" class="text-danger"></span>
     </div>
 
     <button type="submit" class="btn btn-primary">Enviar</button>
+
 </form>
+
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }
+
+

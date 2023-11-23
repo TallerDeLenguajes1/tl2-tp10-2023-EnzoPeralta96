@@ -1,16 +1,22 @@
-@model Tablero
+@model ViewModels.UpdateTableroViewModels;
 
 <form asp-controller="Tablero" asp-action="UpdateTablero">
     <div class="form-group">
         <input hidden asp-for="@Model.Id">
-        <label asp-for="@Model.Id_usuario_propietario">Id Usuario Propietario:</label>
-        <input asp-for="@Model.Id_usuario_propietario" class="form-control"/>
 
         <label asp-for="@Model.Nombre">Nombre:</label>
         <input asp-for="@Model.Nombre" class="form-control"/>
 
         <label asp-for="@Model.Descripcion">Descripcion:</label>
         <input asp-for="@Model.Descripcion" class="form-control"/>
+
+        <label asp-for="@Model.Id_usuario_propietario">Id Usuario Propietario:</label> 
+        <select asp-for="@Model.Id_usuario_propietario"  class="form-control">
+            @foreach (var user in Model.Usuarios)
+            {
+                <option value="@user.Id">@user.Id - @user.Nombre_de_usuario </option>
+            }
+        </select>
     </div>
 
     <button type="submit" class="btn btn-primary">Enviar</button>
