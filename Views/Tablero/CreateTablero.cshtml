@@ -5,19 +5,23 @@
         
         <label asp-for="@Model.Nombre">Nombre:</label>
         <input asp-for="@Model.Nombre" class="form-control"/>
+        <span asp-validation-for="@Model.Nombre" class="text-danger"></span>    
 
         <label asp-for="@Model.Descripcion">Descripcion:</label>
         <input asp-for="@Model.Descripcion" class="form-control"/>
+        <span asp-validation-for="@Model.Descripcion" class="text-danger"></span>    
 
 
         <label asp-for="@Model.Id_usuario_propietario">Id Usuario Propietario:</label> 
         <select asp-for="@Model.Id_usuario_propietario"  class="form-control">
         @foreach (var user in Model.Usuarios)
         {
-            <option value="@user.Id">@user.Id - @user.Nombre_de_usuario </option>
+            <option value="@user.Id">@user.Id | @user.Nombre_de_usuario </option>
         }
         </select>
     </div>
     
     <button type="submit" class="btn btn-primary">Enviar</button>
 </form>
+
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

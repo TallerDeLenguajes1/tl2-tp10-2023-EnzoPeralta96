@@ -5,15 +5,7 @@
 @model List<Tarea>
 
 
-<h2 text-aling:center>Listado de Usuarios</h2>
-
-<nav>
-    <ul>
-        <li>
-            <a asp-controller="Tarea" asp-action="CreateTarea">Crear Tarea</a>
-        </li>
-    </ul>
-</nav>
+<h2 text-aling:center>Listado de Tareas</h2>
 
 <table class="table table-dark">
     <thead>
@@ -42,10 +34,12 @@
                 <td>
                     <a asp-controller="Tarea" asp-action="UpdateTarea" asp-route-idTarea="@tarea.Id">Editar</a>
                     <a asp-controller="Tarea" asp-action="AsignarUser" asp-route-idTarea="@tarea.Id">Asginar Usuario</a>
-                    <a asp-controller="Tarea" asp-action="DeleteTarea" asp-route-idTarea="@tarea.Id"
+                    <a asp-controller="Tarea" asp-action="DeleteTarea" asp-route-idTableroDE="@tarea.Id_tablero" asp-route-idTareaDE="@tarea.Id" 
                         onclick="return confirm('¿Estas seguro que quieres eliminar el elemento?')">Eliminar</a>
                 </td>
             </tr>
         }
     </tbody>
 </table>
+
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

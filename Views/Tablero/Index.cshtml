@@ -5,12 +5,18 @@
 @model List<Tablero>
 
 
+
 <h2 text-aling:center>Listado de Tableros</h2>
 
 <nav>
     <ul>
+
         <li>
-             <a asp-controller="Tablero" asp-action="CreateTablero">Crear Tablero</a>
+            <a asp-controller="Tablero" asp-action="CreateTablero">Crear Tablero</a>
+        </li>
+        
+        <li>
+            <a asp-controller="Tarea" asp-action="CreateTarea">Crear Tarea</a>
         </li>
     </ul>
 </nav>
@@ -22,7 +28,9 @@
             <th>ID Usuario Propietario</th>
             <th>Nombre</th>
             <th>Descripcion</th>
-            <th></th>
+            <th>Editar</th>
+            <th>Eliminar</th>
+            <th>Ver</th>
         </tr>
     </thead>
     <tbody>
@@ -32,11 +40,16 @@
                 <td hidden>@tablero.Id</td>
                 <td>@tablero.Id_usuario_propietario</td>
                 <td>@tablero.Nombre</td>
-                <td>@tablero.Descripcion</td> 
+                <td>@tablero.Descripcion</td>
                 <td>
                     <a asp-controller="Tablero" asp-action="UpdateTablero" asp-route-idTablero="@tablero.Id">Editar</a>
+                </td>
+                <td>
                     <a asp-controller="Tablero" asp-action="DeleteTablero" asp-route-idTablero="@tablero.Id"
                         onclick="return confirm('¿Estas seguro que quieres eliminar el elemento?')">Eliminar</a>
+                </td>
+                <td>
+                    <a asp-controller="Tarea" asp-action="TareasByTablero" asp-route-idTablero="@tablero.Id">Tareas</a>
                 </td>
             </tr>
         }

@@ -5,14 +5,16 @@ namespace ViewModels;
 public class CreateTableroViewModels
 {
 
-    [Required(ErrorMessage = "Campo requerido")]
-    public int Id_usuario_propietario { get; set; }
+
 
     [Required(ErrorMessage = "Campo requerido")]
     public string Nombre { get; set; }
 
     [Required(ErrorMessage = "Campo requerido")]
     public string Descripcion { get; set; }
+
+    [Required(ErrorMessage = "Campo requerido")]
+    public int Id_usuario_propietario { get; set; }
     public List<Usuario> Usuarios { get; set; }
 
     public CreateTableroViewModels()
@@ -24,5 +26,5 @@ public class CreateTableroViewModels
         Usuarios = usuariosDB;
     }
 
-    
+
 }

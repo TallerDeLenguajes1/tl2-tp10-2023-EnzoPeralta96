@@ -1,10 +1,15 @@
-@model Tarea
-
+@model ViewModels.CreateTareaViewModels;
 
 <form asp-controller="Tarea" asp-action="CreateTarea">
     <div class="form-group">
-        <label asp-for="@Model.Id_tablero" hidden>Tablero:</label>
-        <input asp-for="@Model.Id_tablero" class="form-control" hidden />
+        <label asp-for="@Model.Id_tablero" >Id Tablero:</label>
+
+        <select asp-for="@Model.Id_tablero"  class="form-control">
+        @foreach (var tab in Model.Tableros)
+        {
+            <option value="@tab.Id">@tab.Id</option>
+        }
+        </select>
 
         <label asp-for="@Model.Nombre">Nombre:</label>
         <input asp-for="@Model.Nombre" class="form-control" />
@@ -21,3 +26,5 @@
 
     <button type="submit" class="btn btn-primary">Enviar</button>
 </form>
+
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

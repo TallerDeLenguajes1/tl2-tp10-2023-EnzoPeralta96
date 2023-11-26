@@ -1,9 +1,18 @@
+using RepositorioUsuario;
+using TableroRepositorio;
+using TareaRepositorio;
+
 var builder = WebApplication.CreateBuilder(args);
 
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddDistributedMemoryCache();
+
+builder.Services.AddScoped<ITareaRepository, TareaRepository>();
+builder.Services.AddScoped<ITableroRepository, TableroRepository>();
+builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+
 
 builder.Services.AddSession(options =>
 {
@@ -31,6 +40,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Login}/{action=Index}/{id?}");
 
 app.Run();

@@ -9,20 +9,33 @@ namespace tl2_tp10_2023_EnzoPeralta96.Controllers;
 public class UsuarioController : Controller
 {
     private readonly ILogger<UsuarioController> _logger;
-    private UsuarioRepository _userRepository;
+    private readonly IUsuarioRepository _userRepository;
 
 
-    public UsuarioController(ILogger<UsuarioController> logger)
+    public UsuarioController(ILogger<UsuarioController> logger, IUsuarioRepository userRepository)
     {
         _logger = logger;
-        _userRepository = new UsuarioRepository();
+        _userRepository = userRepository;
     }
 
     public IActionResult Index()
     {
         if (!IsLogged()) return RedirectToRoute(new { controller = "Login", action = "Index" });
-        var listUsers = _userRepository.GetAllUsers();
+
+        var listUsers = new List<Usuario>();
+
+        if (IsAdmin())
+        {
+            listUsers = _userRepository.GetAllUsers();
+        }    
+        else
+        {
+            var user = _userRepository.GetAllUsers().FirstOrDefault(u => u.Nombre_de_usuario == HttpContext.Session.GetString("Usuario") && u.Password == HttpContext.Session.GetString("Password"));
+            listUsers.Add(user); 
+        }
         return View(listUsers);
+        
+
     }
 
 
@@ -38,8 +51,8 @@ public class UsuarioController : Controller
     public IActionResult CreateUser(CreateUserViewModels user)
     {
         if (!IsLogged()) return RedirectToRoute(new { controller = "Login", action = "Index" });
-        if (!ModelState.IsValid) return RedirectToAction("Index");
         if (!IsAdmin()) return RedirectToAction("Index");
+        if (!ModelState.IsValid) return RedirectToAction("CreateUser");
         _userRepository.Create(new Usuario(user));
         return RedirectToAction("Index");
     }
@@ -49,7 +62,6 @@ public class UsuarioController : Controller
     public IActionResult UpdateUser(int idUsuario)
     {
         if (!IsLogged()) return RedirectToRoute(new { controller = "Login", action = "Index" });
-        if (!IsAdmin()) return RedirectToAction("Index");
 
         var user = _userRepository.GetUsuarioById(idUsuario);
 
@@ -70,10 +82,10 @@ public class UsuarioController : Controller
     {
         if (!IsLogged()) return RedirectToRoute(new { controller = "Login", action = "Index" });
         if (!ModelState.IsValid) return RedirectToAction("Index");
-        if (!IsAdmin()) return RedirectToAction("Index");
         _userRepository.Update(user.Id, new Usuario(user));
         return RedirectToAction("Index");
     }
+
 
 
     public IActionResult DeleteUser(int idUsuario)

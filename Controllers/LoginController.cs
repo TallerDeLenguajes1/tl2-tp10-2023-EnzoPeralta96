@@ -10,12 +10,12 @@ namespace tl2_tp10_2023_EnzoPeralta96.Controllers;
 public class LoginController : Controller
 {
     private readonly ILogger<LoginController> _logger;
-    private UsuarioRepository _usuarioRepository;
+    private readonly IUsuarioRepository _usuarioRepository;
 
-    public LoginController(ILogger<LoginController> logger)
+    public LoginController(ILogger<LoginController> logger, IUsuarioRepository usuarioRepository)
     {
         _logger = logger;
-        _usuarioRepository = new UsuarioRepository();
+        _usuarioRepository = usuarioRepository;
     }
 
     private void CreateSession(Usuario userLoged)
@@ -33,10 +33,23 @@ public class LoginController : Controller
     [HttpPost]
     public IActionResult LoginUser(LoginViewModels userViewModels)
     {
-        var users = _usuarioRepository.GetAllUsers();
-        var user = users.FirstOrDefault(u => u.Nombre_de_usuario == userViewModels.Usuario && u.Password == userViewModels.Password);
+        if (!ModelState.IsValid) return RedirectToAction("Index");
+
+        var user = _usuarioRepository.GetAllUsers().FirstOrDefault(u => u.Nombre_de_usuario == userViewModels.Usuario && u.Password == userViewModels.Password);
+
         if (user == null) return RedirectToAction("Index");
+
         CreateSession(user);
-        return RedirectToRoute(new { controller = "Home", action = "Index" });
+        
+        return RedirectToRoute(new { controller = "Tablero", action = "Index" });
+    }
+
+    public IActionResult LogOut()
+    {
+        HttpContext.Session.Remove("Usuario");
+        HttpContext.Session.Remove("Password");
+        HttpContext.Session.Remove("Rol");
+        return Redirect("Index");
     }
 }
+

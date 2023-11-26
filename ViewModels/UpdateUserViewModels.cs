@@ -5,15 +5,7 @@ namespace ViewModels;
 
 public class UpdateUserViewModels
 {
-    public UpdateUserViewModels(int IdUsuario)
-    {
-        Id = IdUsuario;
-    }
-
-    public UpdateUserViewModels()
-    {
-        
-    }
+  
     public int Id{get;set;}
 
     [Required(ErrorMessage = "Campo requerido")]
@@ -27,5 +19,14 @@ public class UpdateUserViewModels
     [DataType(DataType.Password)]
     public string Password { get; set; }
 
+      public UpdateUserViewModels(int IdUsuario)
+    {
+        Id = IdUsuario;
+    }
+
+    public UpdateUserViewModels()
+    {
+        
+    }
 
 }
