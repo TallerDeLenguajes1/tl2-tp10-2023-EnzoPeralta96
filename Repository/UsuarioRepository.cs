@@ -5,7 +5,12 @@ namespace RepositorioUsuario;
 
 public class UsuarioRepository : IUsuarioRepository
 {
-    private readonly string _cadenaDeConexion = "Data Source=DB/kanban.db;Cache=Shared";
+    private readonly string _cadenaDeConexion;
+
+    public UsuarioRepository(string CadenaDeConexion)
+    {
+        _cadenaDeConexion = CadenaDeConexion;
+    }
 
     public void Create(Usuario usuario)
     {
@@ -45,7 +50,7 @@ public class UsuarioRepository : IUsuarioRepository
     public Usuario GetUsuarioById(int idUsuario)
     {
         var query = $"SELECT * FROM usuario WHERE id = @idUsuario";
-        var usuario = new Usuario();
+        Usuario usuario = null;
         using (SQLiteConnection conexion = new SQLiteConnection(_cadenaDeConexion))
         {
             conexion.Open();
@@ -64,6 +69,7 @@ public class UsuarioRepository : IUsuarioRepository
             }
             conexion.Close();
         }
+        if (usuario == null) throw new Exception("Usuario no encontrado");
         return usuario;
     }
 
@@ -95,22 +101,18 @@ public class UsuarioRepository : IUsuarioRepository
         return usuarios;
     }
 
-    public bool DeleteUsuarioById(int idUsuario)
+    public void DeleteUsuarioById(int idUsuario)
     {
         var query = $"DELETE FROM usuario WHERE id = @idUsuario";
-        bool usuarioEliminado = false;
+
         using (SQLiteConnection conexion = new SQLiteConnection(_cadenaDeConexion))
         {
             conexion.Open();
             var command = new SQLiteCommand(query, conexion);
             command.Parameters.Add(new SQLiteParameter("@idUsuario", idUsuario));
-            if (command.ExecuteNonQuery() > 0)
-            {
-                usuarioEliminado = true;
-            }
+            command.ExecuteNonQuery();
             conexion.Close();
         }
-        return usuarioEliminado;
 
     }
 

@@ -33,15 +33,29 @@ public class LoginController : Controller
     [HttpPost]
     public IActionResult LoginUser(LoginViewModels userViewModels)
     {
-        if (!ModelState.IsValid) return RedirectToAction("Index");
+        try
+        {
+            if (!ModelState.IsValid) return RedirectToAction("Index");
 
-        var user = _usuarioRepository.GetAllUsers().FirstOrDefault(u => u.Nombre_de_usuario == userViewModels.Usuario && u.Password == userViewModels.Password);
+            var user = _usuarioRepository.GetAllUsers().FirstOrDefault(u => u.Nombre_de_usuario == userViewModels.Usuario && u.Password == userViewModels.Password);
 
-        if (user == null) return RedirectToAction("Index");
+            if (user == null)
+            {
+                _logger.LogWarning("Intento de acceso invalido - Usuario:" + userViewModels.Usuario + " Clave ingresada: " + userViewModels.Password);
+                return RedirectToAction("Index");
+            }
 
-        CreateSession(user);
-        
-        return RedirectToRoute(new { controller = "Tablero", action = "Index" });
+            _logger.LogInformation("el usuario " + user.Nombre_de_usuario + " ingreso correctamente");
+
+            CreateSession(user);
+
+            return RedirectToRoute(new { controller = "Tablero", action = "Index" });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.ToString());
+            return BadRequest("Fallo el inicio de sesion");
+        }
     }
 
     public IActionResult LogOut()

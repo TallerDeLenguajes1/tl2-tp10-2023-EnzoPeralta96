@@ -6,7 +6,12 @@ namespace TareaRepositorio;
 
 public class TareaRepository : ITareaRepository
 {
-    private readonly string _cadenaDeConexion = "Data Source=DB/kanban.db;Cache=Shared";
+    private readonly string _cadenaDeConexion;
+
+    public TareaRepository(string CadenaDeConexion)
+    {
+        _cadenaDeConexion = CadenaDeConexion;
+    }
 
     public void Create(int idTablero, Tarea tarea)
     {
@@ -19,40 +24,15 @@ public class TareaRepository : ITareaRepository
             command.Parameters.Add(new SQLiteParameter("@idTablero", idTablero));
             command.Parameters.Add(new SQLiteParameter("@nombre", tarea.Nombre));
             command.Parameters.Add(new SQLiteParameter("@estado", tarea.EstadoTarea));
-            if (string.IsNullOrWhiteSpace(tarea.Descripcion) || string.IsNullOrEmpty(tarea.Descripcion))
-            {
-                command.Parameters.Add(new SQLiteParameter("@descripcion", null));
-            }
-            else
-            {
-                command.Parameters.Add(new SQLiteParameter("@descripcion", tarea.Descripcion));
-            }
-
-            if (string.IsNullOrWhiteSpace(tarea.Color) || string.IsNullOrEmpty(tarea.Color))
-            {
-                command.Parameters.Add(new SQLiteParameter("@color", null));
-            }
-            else
-            {
-                command.Parameters.Add(new SQLiteParameter("@color", tarea.Color));
-            }
-
-            if (tarea.Id_usuario_asignado <= 0)
-            {
-                command.Parameters.Add(new SQLiteParameter("@id_usuario_asignado", null));
-            }
-            else
-            {
-                command.Parameters.Add(new SQLiteParameter("@id_usuario_asignado", tarea.Id_usuario_asignado));
-            }
+            command.Parameters.Add(new SQLiteParameter("@descripcion", tarea.Descripcion));
+            command.Parameters.Add(new SQLiteParameter("@color", tarea.Color));
+            command.Parameters.Add(new SQLiteParameter("@id_usuario_asignado", tarea.Id_usuario_asignado));
             command.ExecuteNonQuery();
             conexion.Close();
         }
     }
-    public bool Update(int IdTarea, Tarea tarea)
+    public void Update(int IdTarea, Tarea tarea)
     {
-
-        bool tareaActualizada = false;
 
         var query = $"UPDATE tarea SET id_tablero=@idTablero, nombre=@nombre, estado=@estado, descripcion=@descripcion, color=@color, id_usuario_asignado=@id_usuario_asignado WHERE id = @idTarea";
 
@@ -64,47 +44,18 @@ public class TareaRepository : ITareaRepository
             command.Parameters.Add(new SQLiteParameter("@idTablero", tarea.Id_tablero));
             command.Parameters.Add(new SQLiteParameter("@nombre", tarea.Nombre));
             command.Parameters.Add(new SQLiteParameter("@estado", tarea.EstadoTarea));
-
-            if (string.IsNullOrWhiteSpace(tarea.Descripcion) || string.IsNullOrEmpty(tarea.Descripcion))
-            {
-                command.Parameters.Add(new SQLiteParameter("@descripcion", null));
-            }
-            else
-            {
-                command.Parameters.Add(new SQLiteParameter("@descripcion", tarea.Descripcion));
-            }
-
-            if (string.IsNullOrWhiteSpace(tarea.Color) || string.IsNullOrEmpty(tarea.Color))
-            {
-                command.Parameters.Add(new SQLiteParameter("@color", null));
-            }
-            else
-            {
-                command.Parameters.Add(new SQLiteParameter("@color", tarea.Color));
-            }
-
-            if (tarea.Id_usuario_asignado <= 0)
-            {
-                command.Parameters.Add(new SQLiteParameter("@id_usuario_asignado", null));
-            }
-            else
-            {
-                command.Parameters.Add(new SQLiteParameter("@id_usuario_asignado", tarea.Id_usuario_asignado));
-            }
-
-            if (command.ExecuteNonQuery() > 0)
-            {
-                tareaActualizada = true;
-            }
+            command.Parameters.Add(new SQLiteParameter("@descripcion", tarea.Descripcion));
+            command.Parameters.Add(new SQLiteParameter("@color", tarea.Color));
+            command.Parameters.Add(new SQLiteParameter("@id_usuario_asignado", tarea.Id_usuario_asignado));
+            command.ExecuteNonQuery();            
             conexion.Close();
         }
-        return tareaActualizada;
     }
 
     public Tarea GetTareaById(int idTarea)
     {
         var query = $"SELECT * FROM tarea WHERE id = @idTarea";
-        var tarea = new Tarea();
+        Tarea tarea = null;
         using (SQLiteConnection conexion = new SQLiteConnection(_cadenaDeConexion))
         {
             conexion.Open();
@@ -126,6 +77,9 @@ public class TareaRepository : ITareaRepository
             }
             conexion.Close();
         }
+
+        if (tarea == null) throw new Exception("Tarea no creada");
+
         return tarea;
     }
 
@@ -175,7 +129,6 @@ public class TareaRepository : ITareaRepository
             {
                 while (reader.Read())
                 {
-
                     var tarea = new Tarea
                     {
                         Id = Convert.ToInt32(reader["id"]),
@@ -194,28 +147,24 @@ public class TareaRepository : ITareaRepository
         return tareas;
     }
 
-    public bool Delete(int idTarea)
+    public void Delete(int idTarea)
     {
         var query = $"DELETE FROM tarea WHERE id = @idTarea";
-        bool tareaEliminada = false;
+
         using (SQLiteConnection conexion = new SQLiteConnection(_cadenaDeConexion))
         {
             conexion.Open();
             var command = new SQLiteCommand(query, conexion);
             command.Parameters.Add(new SQLiteParameter("@idTarea", idTarea));
-            if (command.ExecuteNonQuery() > 0)
-            {
-                tareaEliminada = true;
-            }
+            command.ExecuteNonQuery();
             conexion.Close();
         }
-        return tareaEliminada;
     }
 
     public bool AsignarUsuario(int idTarea, int idUsuario)
     {
         bool usuarioAsignado = false;
-     
+
         var query = $"UPDATE tarea SET id_usuario_asignado=@id_usuario_asignado WHERE id = @idTarea";
 
         using (SQLiteConnection conexion = new SQLiteConnection(_cadenaDeConexion))

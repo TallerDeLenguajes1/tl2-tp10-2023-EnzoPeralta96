@@ -4,7 +4,13 @@ using tl2_tp10_2023_EnzoPeralta96.Models;
 
 public class TableroRepository : ITableroRepository
 {
-    private readonly string _cadenaDeConexion = "Data Source=DB/kanban.db;Cache=Shared";
+    private readonly string _cadenaDeConexion;
+
+    public TableroRepository(string CadenaDeConexion)
+    {
+        _cadenaDeConexion = CadenaDeConexion;
+    }
+
     public void Create(Tablero tablero)
     {
         var query = $"INSERT INTO tablero(id_usuario_propietario,nombre,descripcion) VALUES(@id_usuario_propietario,@nombre,@descripcion)";
@@ -21,9 +27,8 @@ public class TableroRepository : ITableroRepository
         }
     }
 
-    public bool Update(int IdTablero, Tablero tablero)
+    public void Update(int IdTablero, Tablero tablero)
     {
-        bool tableroActaulizado = false;
         var query = $"UPDATE tablero SET id_usuario_propietario = @id_usuario_propietario, nombre = @nombre,descripcion = @descripcion WHERE id = @IdTablero";
 
         using (SQLiteConnection conexion = new SQLiteConnection(_cadenaDeConexion))
@@ -34,19 +39,15 @@ public class TableroRepository : ITableroRepository
             command.Parameters.Add(new SQLiteParameter("@id_usuario_propietario", tablero.Id_usuario_propietario));
             command.Parameters.Add(new SQLiteParameter("@nombre", tablero.Nombre));
             command.Parameters.Add(new SQLiteParameter("@descripcion", tablero.Descripcion));
-            if (command.ExecuteNonQuery() > 0)
-            {
-                tableroActaulizado = true;
-            }
+            command.ExecuteNonQuery();
             conexion.Close();
         }
-        return tableroActaulizado;
     }
 
     public Tablero GetTableroById(int IdTablero)
     {
         var query = $"SELECT * FROM tablero WHERE id = @IdTablero";
-        var tablero = new Tablero();
+        Tablero tablero = null;
         using (SQLiteConnection conexion = new SQLiteConnection(_cadenaDeConexion))
         {
             conexion.Open();
@@ -65,6 +66,9 @@ public class TableroRepository : ITableroRepository
             }
             conexion.Close();
         }
+
+        if (tablero == null) throw new Exception("Tablero no creado");
+        
         return tablero;
     }
 
@@ -125,23 +129,17 @@ public class TableroRepository : ITableroRepository
         return tableros;
     }
 
-    public bool Delete(int IdTablero)
+    public void Delete(int IdTablero)
     {
         var query = $"DELETE FROM tablero WHERE id = @IdTablero";
-        bool tableroEliminado = false;
         using (SQLiteConnection conexion = new SQLiteConnection(_cadenaDeConexion))
         {
             conexion.Open();
             var command = new SQLiteCommand(query, conexion);
             command.Parameters.Add(new SQLiteParameter("@IdTablero", IdTablero));
-            if (command.ExecuteNonQuery() > 0)
-            {
-                tableroEliminado = true;
-            }
+            command.ExecuteNonQuery();
             conexion.Close();
         }
-        return tableroEliminado;
-
     }
 
 

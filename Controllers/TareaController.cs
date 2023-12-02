@@ -15,7 +15,7 @@ public class TareaController : Controller
     private readonly IUsuarioRepository _usuarioRepository;
     private readonly ITableroRepository _tableroRepository;
 
-    public TareaController(ILogger<TareaController> logger,  ITareaRepository tareaRepository, IUsuarioRepository usuarioRepository, ITableroRepository tableroRepository)
+    public TareaController(ILogger<TareaController> logger, ITareaRepository tareaRepository, IUsuarioRepository usuarioRepository, ITableroRepository tableroRepository)
     {
         _logger = logger;
         _tareaRepository = tareaRepository;
@@ -33,91 +33,163 @@ public class TareaController : Controller
     }
     public IActionResult TareasByTablero(int idTablero)
     {
-        if (!IsLogged()) return RedirectToRoute(new { controller = "Login", action = "Index" });
-        var tareas = _tareaRepository.GetTareasByTablero(idTablero);
-        return View(tareas);
+        try
+        {
+            if (!IsLogged()) return RedirectToRoute(new { controller = "Login", action = "Index" });
+            var tareas = _tareaRepository.GetTareasByTablero(idTablero);
+            return View(tareas);
+        }
+        catch (System.Exception ex)
+        {
+            _logger.LogError(ex.ToString());
+            return BadRequest();
+        }
+
     }
 
     [HttpGet]
     public IActionResult CreateTarea()
     {
-        if (!IsLogged()) return RedirectToRoute(new { controller = "Login", action = "Index" });
-
-        var creTareaVM = new CreateTareaViewModels();
-
-        if (IsAdmin())
+        try
         {
-            creTareaVM.Tableros = _tableroRepository.GetTableros();
+            if (!IsLogged()) return RedirectToRoute(new { controller = "Login", action = "Index" });
+
+            var creTareaVM = new CreateTareaViewModels();
+
+            if (IsAdmin())
+            {
+                creTareaVM.Tableros = _tableroRepository.GetTableros();
+            }
+            else
+            {
+                var user = _usuarioRepository.GetAllUsers().FirstOrDefault(u => u.Nombre_de_usuario == HttpContext.Session.GetString("Usuario") && u.Password == HttpContext.Session.GetString("Password"));
+
+                creTareaVM.Tableros = _tableroRepository.GetTableroByUser(user.Id);
+            }
+
+            return View(creTareaVM);
         }
-        else
+        catch (System.Exception ex)
         {
-            var user = _usuarioRepository.GetAllUsers().FirstOrDefault(u => u.Nombre_de_usuario == HttpContext.Session.GetString("Usuario") && u.Password == HttpContext.Session.GetString("Password"));
-
-            creTareaVM.Tableros = _tableroRepository.GetTableroByUser(user.Id);
+            _logger.LogError(ex.ToString());
+            return BadRequest();
         }
 
-        return View(creTareaVM);
     }
 
     [HttpPost]
     public IActionResult CreateTarea(CreateTareaViewModels tareaVM)
     {
-        if (!IsLogged()) return RedirectToRoute(new { controller = "Login", action = "Index" });
-        if (!ModelState.IsValid) return RedirectToAction("CreateTarea");
-        _tareaRepository.Create(tareaVM.Id_tablero, new Tarea(tareaVM));
-        return RedirectToAction("TareasByTablero", new { idTablero = tareaVM.Id_tablero });
+        try
+        {
+            if (!IsLogged()) return RedirectToRoute(new { controller = "Login", action = "Index" });
+            if (!ModelState.IsValid) return RedirectToAction("CreateTarea");
+            _tareaRepository.Create(tareaVM.Id_tablero, new Tarea(tareaVM));
+            return RedirectToAction("TareasByTablero", new { idTablero = tareaVM.Id_tablero });
+        }
+        catch (System.Exception ex)
+        {
+            _logger.LogError(ex.ToString());
+            return BadRequest();
+        }
+
     }
 
 
     [HttpGet]
     public IActionResult UpdateTarea(int idTarea)
     {
-        if (!IsLogged()) return RedirectToRoute(new { controller = "Login", action = "Index" });
-
-        var upTareaVM = new UpdateTareaViewModels(_tareaRepository.GetTareaById(idTarea));
-
-        if (IsAdmin())
+        try
         {
-            upTareaVM.Tableros = _tableroRepository.GetTableros();
-        }else
-        {
-            var user = _usuarioRepository.GetAllUsers().FirstOrDefault(u => u.Nombre_de_usuario == HttpContext.Session.GetString("Usuario") && u.Password == HttpContext.Session.GetString("Password"));
-            upTareaVM.Tableros = _tableroRepository.GetTableroByUser(user.Id); 
+            if (!IsLogged()) return RedirectToRoute(new { controller = "Login", action = "Index" });
+
+            var upTareaVM = new UpdateTareaViewModels(_tareaRepository.GetTareaById(idTarea));
+
+            if (IsAdmin())
+            {
+                upTareaVM.Tableros = _tableroRepository.GetTableros();
+            }
+            else
+            {
+                var user = _usuarioRepository.GetAllUsers().FirstOrDefault(u => u.Nombre_de_usuario == HttpContext.Session.GetString("Usuario") && u.Password == HttpContext.Session.GetString("Password"));
+                upTareaVM.Tableros = _tableroRepository.GetTableroByUser(user.Id);
+            }
+            return View(upTareaVM);
         }
-        return View(upTareaVM);
+        catch (System.Exception ex)
+        {
+            _logger.LogError(ex.ToString());
+            return BadRequest();
+        }
+
     }
 
 
     [HttpPost]
     public IActionResult UpdateTarea(UpdateTareaViewModels upTareaVM)
     {
-        if (!IsLogged()) return RedirectToRoute(new { controller = "Login", action = "Index" });
-        if (!ModelState.IsValid) return RedirectToAction("UpdateTarea", new {idTarea = upTareaVM.Id});
-        _tareaRepository.Update(upTareaVM.Id, new Tarea(upTareaVM));
-        return RedirectToAction("TareasByTablero", new { idTablero = upTareaVM.Id_tablero });
+        try
+        {
+            if (!IsLogged()) return RedirectToRoute(new { controller = "Login", action = "Index" });
+            if (!ModelState.IsValid) return RedirectToAction("UpdateTarea", new { idTarea = upTareaVM.Id });
+            _tareaRepository.Update(upTareaVM.Id, new Tarea(upTareaVM));
+            return RedirectToAction("TareasByTablero", new { idTablero = upTareaVM.Id_tablero });
+        }
+        catch (System.Exception ex)
+        {
+            _logger.LogError(ex.ToString());
+            return BadRequest();
+        }
+
     }
 
     [HttpGet]
     public IActionResult AsignarUser(int idTarea)
     {
-        var tarea = _tareaRepository.GetTareaById(idTarea);
-        return View(tarea);
+        try
+        {
+            var tarea = _tareaRepository.GetTareaById(idTarea);
+            return View(tarea);
+        }
+        catch (System.Exception ex)
+        {
+            _logger.LogError(ex.ToString());
+            return BadRequest();
+        }
+
     }
 
     [HttpPost]
     public IActionResult AsignarUser(Tarea tarea)
     {
-        var user = _usuarioRepository.GetUsuarioById((int)tarea.Id_usuario_asignado);
-        tarea.Id_usuario_asignado = user.Id;
-        _tareaRepository.AsignarUsuario(tarea.Id, (int)tarea.Id_usuario_asignado);
-        return RedirectToAction("Index");
+        try
+        {
+            var user = _usuarioRepository.GetUsuarioById((int)tarea.Id_usuario_asignado);
+            tarea.Id_usuario_asignado = user.Id;
+            _tareaRepository.AsignarUsuario(tarea.Id, (int)tarea.Id_usuario_asignado);
+            return RedirectToAction("Index");
+        }
+        catch (System.Exception ex)
+        {
+            _logger.LogError(ex.ToString());
+            return BadRequest();
+        }
+
     }
 
 
-    public IActionResult DeleteTarea(int idTableroDe,int idTareaDE)
+    public IActionResult DeleteTarea(int idTableroDe, int idTareaDE)
     {
-        _tareaRepository.Delete(idTareaDE);
-        return RedirectToAction("TareasByTablero", new{idTablero = idTableroDe});
+        try
+        {
+            _tareaRepository.Delete(idTareaDE);
+            return RedirectToAction("TareasByTablero", new { idTablero = idTableroDe });
+        }
+        catch (System.Exception ex)
+        {
+            _logger.LogError(ex.ToString());
+            return BadRequest();
+        }
     }
 
     public IActionResult Privacy()

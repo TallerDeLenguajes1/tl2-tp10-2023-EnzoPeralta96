@@ -7,5 +7,5 @@ public interface IUsuarioRepository
     public void Update(int idUsuario, Usuario usuario);
     public List<Usuario> GetAllUsers();
     public Usuario GetUsuarioById(int idUsuario);
-    public bool DeleteUsuarioById(int idUsuario);
+    public void DeleteUsuarioById(int idUsuario);
 }

@@ -20,58 +20,91 @@ public class UsuarioController : Controller
 
     public IActionResult Index()
     {
-        if (!IsLogged()) return RedirectToRoute(new { controller = "Login", action = "Index" });
-
-        var listUsers = new List<Usuario>();
-
-        if (IsAdmin())
+        try
         {
-            listUsers = _userRepository.GetAllUsers();
-        }    
-        else
-        {
-            var user = _userRepository.GetAllUsers().FirstOrDefault(u => u.Nombre_de_usuario == HttpContext.Session.GetString("Usuario") && u.Password == HttpContext.Session.GetString("Password"));
-            listUsers.Add(user); 
+            if (!IsLogged()) return RedirectToRoute(new { controller = "Login", action = "Index" });
+
+            var listUsers = new List<Usuario>();
+
+            if (IsAdmin())
+            {
+                listUsers = _userRepository.GetAllUsers();
+            }
+            else
+            {
+                var user = _userRepository.GetAllUsers().FirstOrDefault(u => u.Nombre_de_usuario == HttpContext.Session.GetString("Usuario") && u.Password == HttpContext.Session.GetString("Password"));
+                listUsers.Add(user);
+            }
+            return View(listUsers);
         }
-        return View(listUsers);
-        
-
+        catch (System.Exception ex)
+        {
+            _logger.LogError(ex.ToString());
+            return BadRequest();
+        }
     }
 
 
     [HttpGet]
     public IActionResult CreateUser()
     {
-        if (!IsLogged()) return RedirectToRoute(new { controller = "Login", action = "Index" });
-        if (!IsAdmin()) return RedirectToAction("Index");
-        return View(new CreateUserViewModels());
+        try
+        {
+            if (!IsLogged()) return RedirectToRoute(new { controller = "Login", action = "Index" });
+            if (!IsAdmin()) return RedirectToAction("Index");
+            return View(new CreateUserViewModels());
+        }
+        catch (System.Exception ex)
+        {
+            _logger.LogError(ex.ToString());
+            return BadRequest();
+        }
+
     }
 
     [HttpPost]
     public IActionResult CreateUser(CreateUserViewModels user)
     {
-        if (!IsLogged()) return RedirectToRoute(new { controller = "Login", action = "Index" });
-        if (!IsAdmin()) return RedirectToAction("Index");
-        if (!ModelState.IsValid) return RedirectToAction("CreateUser");
-        _userRepository.Create(new Usuario(user));
-        return RedirectToAction("Index");
+        try
+        {
+            if (!IsLogged()) return RedirectToRoute(new { controller = "Login", action = "Index" });
+            if (!IsAdmin()) return RedirectToAction("Index");
+            if (!ModelState.IsValid) return RedirectToAction("CreateUser");
+            _userRepository.Create(new Usuario(user));
+            return RedirectToAction("Index");
+        }
+        catch (System.Exception ex)
+        {
+            _logger.LogError(ex.ToString());
+            return BadRequest();
+        }
+
     }
 
 
     [HttpGet]
     public IActionResult UpdateUser(int idUsuario)
     {
-        if (!IsLogged()) return RedirectToRoute(new { controller = "Login", action = "Index" });
-
-        var user = _userRepository.GetUsuarioById(idUsuario);
-
-        if (user != null)
+        try
         {
-            return View(new UpdateUserViewModels(user.Id));
+            if (!IsLogged()) return RedirectToRoute(new { controller = "Login", action = "Index" });
+
+            var user = _userRepository.GetUsuarioById(idUsuario);
+
+            if (user != null)
+            {
+                return View(new UpdateUserViewModels(user.Id));
+            }
+            else
+            {
+                return RedirectToAction("Index");
+            }
+
         }
-        else
+        catch (System.Exception ex)
         {
-            return RedirectToAction("Index");
+            _logger.LogError(ex.ToString());
+            return BadRequest();
         }
 
     }
@@ -80,20 +113,38 @@ public class UsuarioController : Controller
     [HttpPost]
     public IActionResult UpdateUser(UpdateUserViewModels user)
     {
-        if (!IsLogged()) return RedirectToRoute(new { controller = "Login", action = "Index" });
-        if (!ModelState.IsValid) return RedirectToAction("Index");
-        _userRepository.Update(user.Id, new Usuario(user));
-        return RedirectToAction("Index");
+        try
+        {
+            if (!IsLogged()) return RedirectToRoute(new { controller = "Login", action = "Index" });
+            if (!ModelState.IsValid) return RedirectToAction("Index");
+            _userRepository.Update(user.Id, new Usuario(user));
+            return RedirectToAction("Index");
+        }
+        catch (System.Exception ex)
+        {
+            _logger.LogError(ex.ToString());
+            return BadRequest();
+        }
+
     }
 
 
 
     public IActionResult DeleteUser(int idUsuario)
     {
-        if (!IsLogged()) return RedirectToRoute(new { controller = "Login", action = "Index" });
-        if (!IsAdmin()) return RedirectToAction("Index");
-        _userRepository.DeleteUsuarioById(idUsuario);
-        return RedirectToAction("Index");
+        try
+        {
+            if (!IsLogged()) return RedirectToRoute(new { controller = "Login", action = "Index" });
+            if (!IsAdmin()) return RedirectToAction("Index");
+            _userRepository.DeleteUsuarioById(idUsuario);
+            return RedirectToAction("Index");
+        }
+        catch (System.Exception ex)
+        {
+            _logger.LogError(ex.ToString());
+            return BadRequest();
+        }
+
     }
 
     public IActionResult Privacy()
