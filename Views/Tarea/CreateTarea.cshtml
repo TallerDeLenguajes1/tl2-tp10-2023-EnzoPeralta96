@@ -2,13 +2,13 @@
 
 <form asp-controller="Tarea" asp-action="CreateTarea">
     <div class="form-group">
-        <label asp-for="@Model.Id_tablero" >Id Tablero:</label>
+        <label asp-for="@Model.Id_tablero">Id Tablero:</label>
 
-        <select asp-for="@Model.Id_tablero"  class="form-control">
-        @foreach (var tab in Model.Tableros)
-        {
-            <option value="@tab.Id">@tab.Id</option>
-        }
+        <select asp-for="@Model.Id_tablero" class="form-control">
+            @foreach (var tab in Model.Tableros)
+            {
+                <option value="@tab.Id">@tab.Id</option>
+            }
         </select>
 
         <label asp-for="@Model.Nombre">Nombre:</label>
@@ -21,10 +21,23 @@
         <input asp-for="@Model.Descripcion" class="form-control" />
 
         <label asp-for="@Model.Color">Color:</label>
-        <input asp-for="@Model.Color" class="form-control" />
+        <input asp-for="@Model.Color" class="form-control" id="stringColor" name="Color" readonly hidden>
+        <input type="color" class="form-control" id="Color" onchange="GuardarColor()">
+
+
     </div>
 
     <button type="submit" class="btn btn-primary">Enviar</button>
 </form>
 
-@section Scripts { <partial name="_ValidationScriptsPartial" /> }
+<script>
+    function GuardarColor() {
+        var Color = document.getElementById('Color');
+        var stringColor = document.getElementById('stringColor');
+        stringColor.value = Color.value;
+    }
+</script>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

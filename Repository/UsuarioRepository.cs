@@ -50,7 +50,8 @@ public class UsuarioRepository : IUsuarioRepository
     public Usuario GetUsuarioById(int idUsuario)
     {
         var query = $"SELECT * FROM usuario WHERE id = @idUsuario";
-        Usuario usuario = null;
+        bool usuarioEncontrado = false;
+        var usuario = new Usuario();
         using (SQLiteConnection conexion = new SQLiteConnection(_cadenaDeConexion))
         {
             conexion.Open();
@@ -65,11 +66,12 @@ public class UsuarioRepository : IUsuarioRepository
                     usuario.Nombre_de_usuario = reader["nombre_de_usuario"].ToString();
                     usuario.Password = reader["password"].ToString();
                     usuario.Rol = (RolUsuario)Enum.Parse(typeof(RolUsuario), reader["rol"].ToString());
+                    usuarioEncontrado = true;
                 }
             }
             conexion.Close();
         }
-        if (usuario == null) throw new Exception("Usuario no encontrado");
+        if (!usuarioEncontrado) throw new Exception("Usuario no encontrado");
         return usuario;
     }
 

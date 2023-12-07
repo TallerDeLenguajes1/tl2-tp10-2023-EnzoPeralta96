@@ -95,7 +95,6 @@ public class TareaController : Controller
 
     }
 
-
     [HttpGet]
     public IActionResult UpdateTarea(int idTarea)
     {
@@ -124,6 +123,30 @@ public class TareaController : Controller
 
     }
 
+
+    [HttpPost]
+    public IActionResult UpdateEstado(int idTarea, Estado EstadoTarea) // consultar
+    {
+        try
+        {
+            if (!IsLogged()) return RedirectToRoute(new { controller = "Login", action = "Index" });
+
+            var tarea = _tareaRepository.GetTareaById(idTarea);
+
+            if(!Enum.IsDefined(typeof(Estado), EstadoTarea)) return RedirectToAction("Error");
+
+            tarea.EstadoTarea = EstadoTarea;
+
+            _tareaRepository.Update(tarea.Id, tarea);
+
+            return RedirectToAction("TareasByTablero", new { idTablero = tarea.Id_tablero });
+        }
+        catch (System.Exception ex)
+        {
+            _logger.LogError(ex.ToString());
+            return BadRequest();
+        }
+    }
 
     [HttpPost]
     public IActionResult UpdateTarea(UpdateTareaViewModels upTareaVM)
@@ -174,7 +197,6 @@ public class TareaController : Controller
             _logger.LogError(ex.ToString());
             return BadRequest();
         }
-
     }
 
 

@@ -52,10 +52,26 @@ public class TareaRepository : ITareaRepository
         }
     }
 
+    public void UpdateEstado(int idTarea, Estado nuevoEstado)
+    {
+        var query = $"UPDATE tarea SET  estado=@nuevoEstado WHERE id = @idTarea";
+
+        using (SQLiteConnection conexion = new SQLiteConnection(_cadenaDeConexion))
+        {
+            conexion.Open();
+            var command = new SQLiteCommand(query, conexion);
+            command.Parameters.Add(new SQLiteParameter("@idTarea", idTarea));
+            command.Parameters.Add(new SQLiteParameter("@nuevoEstado", nuevoEstado));
+            command.ExecuteNonQuery();            
+            conexion.Close();
+        }   
+    }
+
     public Tarea GetTareaById(int idTarea)
     {
         var query = $"SELECT * FROM tarea WHERE id = @idTarea";
-        Tarea tarea = null;
+        bool tareaEncontrada = false;
+        Tarea tarea = new Tarea();
         using (SQLiteConnection conexion = new SQLiteConnection(_cadenaDeConexion))
         {
             conexion.Open();
@@ -73,12 +89,13 @@ public class TareaRepository : ITareaRepository
                     tarea.Descripcion = reader["descripcion"].ToString();
                     tarea.Color = reader["color"].ToString();
                     tarea.Id_usuario_asignado = reader["id_usuario_asignado"] != DBNull.Value ? Convert.ToInt32(reader["id_usuario_asignado"]) : (int?)null;
+                    tareaEncontrada = true;
                 }
             }
             conexion.Close();
         }
 
-        if (tarea == null) throw new Exception("Tarea no creada");
+        if (!tareaEncontrada) throw new Exception("Tarea no creada");
 
         return tarea;
     }
@@ -146,6 +163,8 @@ public class TareaRepository : ITareaRepository
         }
         return tareas;
     }
+
+    
 
     public void Delete(int idTarea)
     {

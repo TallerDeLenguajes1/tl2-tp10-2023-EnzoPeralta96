@@ -47,7 +47,9 @@ public class TableroRepository : ITableroRepository
     public Tablero GetTableroById(int IdTablero)
     {
         var query = $"SELECT * FROM tablero WHERE id = @IdTablero";
-        Tablero tablero = null;
+        bool tableroEncontrado = false;
+        var tablero = new Tablero();
+ 
         using (SQLiteConnection conexion = new SQLiteConnection(_cadenaDeConexion))
         {
             conexion.Open();
@@ -62,12 +64,13 @@ public class TableroRepository : ITableroRepository
                     tablero.Id_usuario_propietario = Convert.ToInt32(reader["id_usuario_propietario"]);
                     tablero.Nombre = reader["nombre"].ToString();
                     tablero.Descripcion = reader["descripcion"].ToString();
+                    tableroEncontrado = true;
                 }
             }
             conexion.Close();
         }
 
-        if (tablero == null) throw new Exception("Tablero no creado");
+        if (!tableroEncontrado) throw new Exception("Tablero no creado");
         
         return tablero;
     }
