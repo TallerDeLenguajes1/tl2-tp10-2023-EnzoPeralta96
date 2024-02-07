@@ -1,24 +1,25 @@
 @model ViewModels.CreateUserViewModels;
 
+@if(Model.TieneMensajeDeError)
+{
+     <p style="color: red;">@Model.MensajeDeError</p>
+}
 
 <form asp-controller="Usuario" asp-action="CreateUser">
     <div class="form-group">
-        <label asp-for="@Model.Name">Nombre:</label>
+        <label asp-for="@Model.Name"></label>
         <input asp-for="@Model.Name" class="form-control"/>
         <span asp-validation-for="@Model.Name" class="text-danger"></span>
     </div>
 
     <div class="form-group">
-        <label asp-for="@Model.Rol">Rol Usuario</label>
-        <select asp-for="@Model.Rol" asp-items="Html.GetEnumSelectList<tl2_tp10_2023_EnzoPeralta96.Models.RolUsuario>()"
-            class="form-control">
-            <option value="">-- Seleccionar --</option>
-        </select>
+        <label asp-for="@Model.Rol"></label>
+        <select asp-for="@Model.Rol" asp-items="Html.GetEnumSelectList<tl2_tp10_2023_EnzoPeralta96.Models.RolUsuario>()" class="form-control"></select>
         <span asp-validation-for="@Model.Rol" class="text-danger"></span>
     </div>
 
     <div class="form-group">
-        <label asp-for="@Model.Password">Contraseña</label>
+        <label asp-for="@Model.Password"></label>
         <input asp-for="@Model.Password" class="form-control"/>
         <span asp-validation-for="@Model.Password" class="text-danger"></span>
     </div>

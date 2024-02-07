@@ -12,6 +12,79 @@ public class UsuarioRepository : IUsuarioRepository
         _cadenaDeConexion = CadenaDeConexion;
     }
 
+    public Usuario UserExists(string nombre, string pass)
+    {
+        var query = $"SELECT * FROM usuario WHERE nombre_de_usuario = @nombre AND password = @pass AND activo = 1";
+        Usuario usuario = null;
+        using (SQLiteConnection conexion = new SQLiteConnection(_cadenaDeConexion))
+        {
+            conexion.Open();
+            var command = new SQLiteCommand(query, conexion);
+            command.Parameters.Add(new SQLiteParameter("@nombre", nombre));
+            command.Parameters.Add(new SQLiteParameter("@pass", pass));
+
+            using (SQLiteDataReader reader = command.ExecuteReader())
+            {
+                if (reader.Read())
+                {
+                    usuario = new Usuario
+                    {
+                        Id = Convert.ToInt32(reader["id"]),
+                        Nombre_de_usuario = reader["nombre_de_usuario"].ToString(),
+                        Password = reader["password"].ToString(),
+                        Rol = (RolUsuario)Enum.Parse(typeof(RolUsuario), reader["rol"].ToString()),
+                        Activo = Convert.ToInt32(reader["activo"])
+                    };
+                }
+            }
+            conexion.Close();
+        }
+        //if (usuario == null) throw new Exception("Usuario no encontrado");
+        return usuario;
+    }
+
+    public bool NameInUse(string nombre)
+    {
+        var query = $"SELECT COUNT(*) FROM usuario WHERE nombre_de_usuario = @nombre";
+        bool nameInUse = false;
+        using (SQLiteConnection conexion = new SQLiteConnection(_cadenaDeConexion))
+        {
+            conexion.Open();
+
+            var command = new SQLiteCommand(query, conexion);
+
+            command.Parameters.Add(new SQLiteParameter("@nombre", nombre));
+
+            int count = Convert.ToInt32(command.ExecuteScalar());
+
+            nameInUse = count > 0;
+
+            conexion.Close();
+        }
+        return nameInUse;
+    }
+
+    public bool NameInUseUpdate(string nombre, int idUsuario)
+    {
+        var query = $"SELECT COUNT(*) FROM usuario WHERE nombre_de_usuario = @nombre AND id <> @idUsuario";
+        bool nameInUse = false;
+        using (SQLiteConnection conexion = new SQLiteConnection(_cadenaDeConexion))
+        {
+            conexion.Open();
+            var command = new SQLiteCommand(query, conexion);
+            command.Parameters.Add(new SQLiteParameter("@nombre", nombre));
+            command.Parameters.Add(new SQLiteParameter("@idUsuario", idUsuario));
+
+            int count = Convert.ToInt32(command.ExecuteScalar());
+
+            nameInUse = count > 0;
+
+            conexion.Close();
+        }
+        return nameInUse;
+    }
+
+
     public void Create(Usuario usuario)
     {
         var query = $"INSERT INTO usuario(nombre_de_usuario,password,rol) VALUES(@nombre,@pass,@rol)";
@@ -31,7 +104,7 @@ public class UsuarioRepository : IUsuarioRepository
 
     public void Update(int idUsuario, Usuario usuario)
     {
-        var query = $"UPDATE usuario SET nombre_de_usuario = @nombre, password = @pass, rol = @rol WHERE id = @idUsuario";
+        var query = $"UPDATE usuario SET nombre_de_usuario = @nombre, password = @pass WHERE id = @idUsuario";
 
         using (SQLiteConnection conexion = new SQLiteConnection(_cadenaDeConexion))
         {
@@ -40,8 +113,8 @@ public class UsuarioRepository : IUsuarioRepository
             command.Parameters.Add(new SQLiteParameter("@idUsuario", idUsuario));
             command.Parameters.Add(new SQLiteParameter("@nombre", usuario.Nombre_de_usuario));
             command.Parameters.Add(new SQLiteParameter("@pass", usuario.Password));
-            var rolString = Enum.GetName(typeof(RolUsuario), usuario.Rol);
-            command.Parameters.Add(new SQLiteParameter("@rol", rolString));
+            /*var rolString = Enum.GetName(typeof(RolUsuario), usuario.Rol);
+            command.Parameters.Add(new SQLiteParameter("@rol", rolString));*/
             command.ExecuteNonQuery();
             conexion.Close();
         }
@@ -49,7 +122,7 @@ public class UsuarioRepository : IUsuarioRepository
 
     public Usuario GetUsuarioById(int idUsuario)
     {
-        var query = $"SELECT * FROM usuario WHERE id = @idUsuario";
+        var query = $"SELECT * FROM usuario WHERE id = @idUsuario AND activo = 1";
         bool usuarioEncontrado = false;
         var usuario = new Usuario();
         using (SQLiteConnection conexion = new SQLiteConnection(_cadenaDeConexion))
@@ -66,6 +139,7 @@ public class UsuarioRepository : IUsuarioRepository
                     usuario.Nombre_de_usuario = reader["nombre_de_usuario"].ToString();
                     usuario.Password = reader["password"].ToString();
                     usuario.Rol = (RolUsuario)Enum.Parse(typeof(RolUsuario), reader["rol"].ToString());
+                    usuario.Activo = Convert.ToInt32(reader["activo"]);
                     usuarioEncontrado = true;
                 }
             }
@@ -75,15 +149,16 @@ public class UsuarioRepository : IUsuarioRepository
         return usuario;
     }
 
-    public List<Usuario> GetAllUsers()
+    public List<Usuario> GetRestUsers(int idUsuario)
     {
-        var query = $"SELECT * FROM usuario";
+        var query = $"SELECT * FROM usuario WHERE id <> @idUsuario AND activo = 1";
         var usuarios = new List<Usuario>();
         using (SQLiteConnection conexion = new SQLiteConnection(_cadenaDeConexion))
         {
             conexion.Open();
             var command = new SQLiteCommand(query, conexion);
-
+            command.Parameters.Add(new SQLiteParameter("@idUsuario", idUsuario));
+            
             using (SQLiteDataReader reader = command.ExecuteReader())
             {
                 while (reader.Read())
@@ -93,7 +168,36 @@ public class UsuarioRepository : IUsuarioRepository
                         Id = Convert.ToInt32(reader["id"]),
                         Nombre_de_usuario = reader["nombre_de_usuario"].ToString(),
                         Password = reader["password"].ToString(),
-                        Rol = (RolUsuario)Enum.Parse(typeof(RolUsuario), reader["rol"].ToString())
+                        Rol = (RolUsuario)Enum.Parse(typeof(RolUsuario), reader["rol"].ToString()),
+                        Activo = Convert.ToInt32(reader["activo"])
+                    };
+                    usuarios.Add(usuario);
+                }
+            }
+            conexion.Close();
+        }
+        return usuarios;
+    }
+    public List<Usuario> GetAllUsers()
+    {
+        var query = $"SELECT * FROM usuario WHERE activo = 1";
+        var usuarios = new List<Usuario>();
+        using (SQLiteConnection conexion = new SQLiteConnection(_cadenaDeConexion))
+        {
+            conexion.Open();
+            var command = new SQLiteCommand(query, conexion);
+            
+            using (SQLiteDataReader reader = command.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    var usuario = new Usuario
+                    {
+                        Id = Convert.ToInt32(reader["id"]),
+                        Nombre_de_usuario = reader["nombre_de_usuario"].ToString(),
+                        Password = reader["password"].ToString(),
+                        Rol = (RolUsuario)Enum.Parse(typeof(RolUsuario), reader["rol"].ToString()),
+                        Activo = Convert.ToInt32(reader["activo"])
                     };
                     usuarios.Add(usuario);
                 }
@@ -103,9 +207,17 @@ public class UsuarioRepository : IUsuarioRepository
         return usuarios;
     }
 
-    public void DeleteUsuarioById(int idUsuario)
+
+    public void Delete(int idUsuario)
     {
-        var query = $"DELETE FROM usuario WHERE id = @idUsuario";
+        deleteTareasByTablero(idUsuario);
+        deleteTableroByUsuario(idUsuario);
+        deleteUser(idUsuario);
+    }
+
+    private void deleteUser(int idUsuario)
+    {
+        var query = $"UPDATE usuario SET activo = 0 WHERE id = @idUsuario";
 
         using (SQLiteConnection conexion = new SQLiteConnection(_cadenaDeConexion))
         {
@@ -115,8 +227,39 @@ public class UsuarioRepository : IUsuarioRepository
             command.ExecuteNonQuery();
             conexion.Close();
         }
-
     }
+
+   
+
+    private void deleteTableroByUsuario(int idUsuario)
+    {
+        var query = $"UPDATE tablero SET activo = 0 WHERE id_usuario_propietario =  @idUsuario";
+
+        using (SQLiteConnection conexion = new SQLiteConnection(_cadenaDeConexion))
+        {
+            conexion.Open();
+            var command = new SQLiteCommand(query, conexion);
+            command.Parameters.Add(new SQLiteParameter("@idUsuario", idUsuario));
+            command.ExecuteNonQuery();
+            conexion.Close();
+        }
+    }
+
+    private void deleteTareasByTablero(int idUsuario)
+    {
+        var query = $"UPDATE tarea SET activo = 0 WHERE id_tablero IN (SELECT id FROM tablero WHERE id_usuario_propietario =  @idUsuario)";
+
+        using (SQLiteConnection conexion = new SQLiteConnection(_cadenaDeConexion))
+        {
+            conexion.Open();
+            var command = new SQLiteCommand(query, conexion);
+            command.Parameters.Add(new SQLiteParameter("@idUsuario", idUsuario));
+            command.ExecuteNonQuery();
+            conexion.Close();
+        }
+    }
+
+
 
 
 

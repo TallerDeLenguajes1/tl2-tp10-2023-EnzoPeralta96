@@ -3,14 +3,16 @@ namespace ViewModels;
 
 public class TableroViewModels
 {
+    public List<Tablero> MisTableros { get; set; }
 
-    public int Id { get; set; }
-    public int Id_usuario_propietario { get; set; }
-    public string Nombre_usuario_propietario{get;set;}
-    public string Nombre { get; set; }
-    public string Descripcion { get; set; }
-    public TableroViewModels()
+    public List<Tablero> Tableros { get; set; }
+
+    public TableroViewModels(List<Tablero> tablerosPropios, List<Tablero> tableros)
     {
+        MisTableros = tablerosPropios;
+        Tableros = tableros;
     }
+
+
 }
 

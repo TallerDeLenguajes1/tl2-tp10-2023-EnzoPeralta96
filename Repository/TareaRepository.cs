@@ -2,8 +2,6 @@ using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using tl2_tp10_2023_EnzoPeralta96.Models;
 using System.Data.SQLite;
 namespace TareaRepositorio;
-
-
 public class TareaRepository : ITareaRepository
 {
     private readonly string _cadenaDeConexion;
@@ -34,7 +32,7 @@ public class TareaRepository : ITareaRepository
     public void Update(int IdTarea, Tarea tarea)
     {
 
-        var query = $"UPDATE tarea SET id_tablero=@idTablero, nombre=@nombre, estado=@estado, descripcion=@descripcion, color=@color, id_usuario_asignado=@id_usuario_asignado WHERE id = @idTarea";
+        var query = $"UPDATE tarea SET id_tablero = @idTablero, nombre = @nombre, estado = @estado, descripcion = @descripcion, color = @color, id_usuario_asignado = @id_usuario_asignado WHERE id = @idTarea";
 
         using (SQLiteConnection conexion = new SQLiteConnection(_cadenaDeConexion))
         {
@@ -47,7 +45,7 @@ public class TareaRepository : ITareaRepository
             command.Parameters.Add(new SQLiteParameter("@descripcion", tarea.Descripcion));
             command.Parameters.Add(new SQLiteParameter("@color", tarea.Color));
             command.Parameters.Add(new SQLiteParameter("@id_usuario_asignado", tarea.Id_usuario_asignado));
-            command.ExecuteNonQuery();            
+            command.ExecuteNonQuery();
             conexion.Close();
         }
     }
@@ -62,14 +60,43 @@ public class TareaRepository : ITareaRepository
             var command = new SQLiteCommand(query, conexion);
             command.Parameters.Add(new SQLiteParameter("@idTarea", idTarea));
             command.Parameters.Add(new SQLiteParameter("@nuevoEstado", nuevoEstado));
-            command.ExecuteNonQuery();            
+            command.ExecuteNonQuery();
             conexion.Close();
-        }   
+        }
+    }
+
+    public void AssignUser(int idTarea, int idUsuario)
+    {
+        var query = $"UPDATE tarea SET  id_usuario_asignado = @idUsuario WHERE id = @idTarea";
+
+        using (SQLiteConnection conexion = new SQLiteConnection(_cadenaDeConexion))
+        {
+            conexion.Open();
+            var command = new SQLiteCommand(query, conexion);
+            command.Parameters.Add(new SQLiteParameter("@idTarea", idTarea));
+            command.Parameters.Add(new SQLiteParameter("@idUsuario", idUsuario));
+            command.ExecuteNonQuery();
+            conexion.Close();
+        }
+    }
+
+    public void RemoveUser(int IdTarea)
+    {
+        var query = $"UPDATE tarea SET  id_usuario_asignado = NULL WHERE id = @idTarea";
+
+        using (SQLiteConnection conexion = new SQLiteConnection(_cadenaDeConexion))
+        {
+            conexion.Open();
+            var command = new SQLiteCommand(query, conexion);
+            command.Parameters.Add(new SQLiteParameter("@idTarea", IdTarea));
+            command.ExecuteNonQuery();
+            conexion.Close();
+        }
     }
 
     public Tarea GetTareaById(int idTarea)
     {
-        var query = $"SELECT * FROM tarea WHERE id = @idTarea";
+        var query = $"SELECT * FROM tarea WHERE id = @idTarea AND activo = 1";
         bool tareaEncontrada = false;
         Tarea tarea = new Tarea();
         using (SQLiteConnection conexion = new SQLiteConnection(_cadenaDeConexion))
@@ -100,14 +127,17 @@ public class TareaRepository : ITareaRepository
         return tarea;
     }
 
-    public List<Tarea> GetTareasByUser(int idUsuario)
+
+
+    public List<Tarea> GetTareasAsignadasByTablero(int idTablero, int idUsuario)
     {
-        var query = $"SELECT * FROM tarea WHERE id_usuario_asignado = @IdUsuario";
+        var query = $"SELECT tar.id, tar.id_tablero, tar.nombre, tar.estado, tar.descripcion, tar.color, tar.id_usuario_asignado, usu.nombre_de_usuario AS usuario_asignado FROM tarea tar INNER JOIN usuario usu ON tar.id_usuario_asignado = usu.id WHERE tar.id_tablero = @IdTablero AND tar.id_usuario_asignado = @IdUsuario AND tar.activo = 1";
         var tareas = new List<Tarea>();
         using (SQLiteConnection conexion = new SQLiteConnection(_cadenaDeConexion))
         {
             conexion.Open();
             var command = new SQLiteCommand(query, conexion);
+            command.Parameters.Add(new SQLiteParameter("@IdTablero", idTablero));
             command.Parameters.Add(new SQLiteParameter("@IdUsuario", idUsuario));
 
             using (SQLiteDataReader reader = command.ExecuteReader())
@@ -122,7 +152,8 @@ public class TareaRepository : ITareaRepository
                         EstadoTarea = (Estado)Enum.Parse(typeof(Estado), reader["estado"].ToString()),
                         Descripcion = reader["descripcion"].ToString(),
                         Color = reader["color"].ToString(),
-                        Id_usuario_asignado = reader["id_usuario_asignado"] != DBNull.Value ? Convert.ToInt32(reader["id_usuario_asignado"]) : (int?)null
+                        Id_usuario_asignado = reader["id_usuario_asignado"] != DBNull.Value ? Convert.ToInt32(reader["id_usuario_asignado"]) : (int?)null,
+                        Usuario_asignado = reader["usuario_asignado"].ToString()
                     };
                     tareas.Add(tarea);
                 }
@@ -134,7 +165,7 @@ public class TareaRepository : ITareaRepository
 
     public List<Tarea> GetTareasByTablero(int idTablero)
     {
-        var query = $"SELECT * FROM tarea WHERE id_tablero = @idTablero";
+        var query = $"SELECT tar.id, tar.id_tablero, tar.nombre, tar.estado, tar.descripcion,tar.color, tar.id_usuario_asignado, usu.nombre_de_usuario AS usuario_asignado FROM tarea tar LEFT JOIN usuario usu ON tar.id_usuario_asignado = usu.id WHERE tar.id_tablero = @idTablero AND tar.activo = 1";
         var tareas = new List<Tarea>();
         using (SQLiteConnection conexion = new SQLiteConnection(_cadenaDeConexion))
         {
@@ -154,7 +185,8 @@ public class TareaRepository : ITareaRepository
                         EstadoTarea = (Estado)Enum.Parse(typeof(Estado), reader["estado"].ToString()),
                         Descripcion = reader["descripcion"].ToString(),
                         Color = reader["color"].ToString(),
-                        Id_usuario_asignado = reader["id_usuario_asignado"] != DBNull.Value ? Convert.ToInt32(reader["id_usuario_asignado"]) : (int?)null
+                        Id_usuario_asignado = reader["id_usuario_asignado"] != DBNull.Value ? Convert.ToInt32(reader["id_usuario_asignado"]) : (int?)null,
+                        Usuario_asignado = reader["usuario_asignado"].ToString()
                     };
                     tareas.Add(tarea);
                 }
@@ -164,11 +196,121 @@ public class TareaRepository : ITareaRepository
         return tareas;
     }
 
-    
+    public List<Tarea> GetTareasByUsuario(int IdUsuario)
+    {
+        var query = $"SELECT tar.id, tar.id_tablero, tar.nombre, tar.estado, tar.descripcion,tar.color, tar.id_usuario_asignado, usu.nombre_de_usuario AS usuario_asignado, tar.activo FROM tablero tab INNER JOIN tarea tar ON tab.id = tar.id_tablero LEFT JOIN usuario usu ON tar.id_usuario_asignado = usu.id WHERE tab.id_usuario_propietario = @IdUsuario AND tab.activo = 1 AND tar.activo = 1";
+        var tareas = new List<Tarea>();
+        using (SQLiteConnection conexion = new SQLiteConnection(_cadenaDeConexion))
+        {
+            conexion.Open();
+            var command = new SQLiteCommand(query, conexion);
+            command.Parameters.Add(new SQLiteParameter("@IdUsuario", IdUsuario));
+
+            using (SQLiteDataReader reader = command.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    var tarea = new Tarea
+                    {
+                        Id = Convert.ToInt32(reader["id"]),
+                        Id_tablero = Convert.ToInt32(reader["id_tablero"]),
+                        Nombre = reader["nombre"].ToString(),
+                        EstadoTarea = (Estado)Enum.Parse(typeof(Estado), reader["estado"].ToString()),
+                        Descripcion = reader["descripcion"].ToString(),
+                        Color = reader["color"].ToString(),
+                        Id_usuario_asignado = reader["id_usuario_asignado"] != DBNull.Value ? Convert.ToInt32(reader["id_usuario_asignado"]) : (int?)null,
+                        Usuario_asignado = reader["usuario_asignado"].ToString()
+                    };
+                    tareas.Add(tarea);
+                }
+            }
+            conexion.Close();
+        }
+        return tareas;
+    }
+
+    public List<Tarea> GetTareasAsignadasByUsuario(int IdUsuario)
+    {
+        var query = $"SELECT tar.id, tar.id_tablero, tar.nombre, tar.estado, tar.descripcion, tar.color, tar.id_usuario_asignado, usu.nombre_de_usuario AS usuario_asignado FROM tarea tar INNER JOIN usuario usu ON tar.id_usuario_asignado = usu.id WHERE tar.id_usuario_asignado = @IdUsuario AND tar.activo = 1";
+        var tareas = new List<Tarea>();
+        using (SQLiteConnection conexion = new SQLiteConnection(_cadenaDeConexion))
+        {
+            conexion.Open();
+            var command = new SQLiteCommand(query, conexion);
+            command.Parameters.Add(new SQLiteParameter("@IdUsuario", IdUsuario));
+
+            using (SQLiteDataReader reader = command.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    var tarea = new Tarea
+                    {
+                        Id = Convert.ToInt32(reader["id"]),
+                        Id_tablero = Convert.ToInt32(reader["id_tablero"]),
+                        Nombre = reader["nombre"].ToString(),
+                        EstadoTarea = (Estado)Enum.Parse(typeof(Estado), reader["estado"].ToString()),
+                        Descripcion = reader["descripcion"].ToString(),
+                        Color = reader["color"].ToString(),
+                        Id_usuario_asignado = reader["id_usuario_asignado"] != DBNull.Value ? Convert.ToInt32(reader["id_usuario_asignado"]) : (int?)null,
+                        Usuario_asignado = reader["usuario_asignado"].ToString()
+                    };
+                    tareas.Add(tarea);
+                }
+            }
+            conexion.Close();
+        }
+        return tareas;
+    }
+
+    public bool UsuarioTieneTareasAsignadas(int idUsuario)
+    {
+        var query = $"SELECT COUNT(*) FROM tarea WHERE id_usuario_asignado = @idUsuario AND activo = 1";
+
+        bool userTieneTareasAsignadas = false;
+
+        using (SQLiteConnection conexion = new SQLiteConnection(_cadenaDeConexion))
+        {
+            conexion.Open();
+
+            var command = new SQLiteCommand(query, conexion);
+
+            command.Parameters.Add(new SQLiteParameter("@idUsuario", idUsuario));
+
+            int count = Convert.ToInt32(command.ExecuteScalar());
+
+            userTieneTareasAsignadas = count > 0;
+
+            conexion.Close();
+        }
+        return userTieneTareasAsignadas;
+    }
+
+    public bool TareaConUsuarioAsignado(int IdTarea)
+    {
+        var query = $"SELECT COUNT(*) FROM tarea WHERE id = @IdTarea AND id_usuario_asignado IS NOT NULL AND activo = 1";
+
+        bool tareaAsignada = false;
+
+        using (SQLiteConnection conexion = new SQLiteConnection(_cadenaDeConexion))
+        {
+            conexion.Open();
+
+            var command = new SQLiteCommand(query, conexion);
+
+            command.Parameters.Add(new SQLiteParameter("@IdTarea", IdTarea));
+
+            int count = Convert.ToInt32(command.ExecuteScalar());
+
+            tareaAsignada = count > 0;
+
+            conexion.Close();
+        }
+        return tareaAsignada;
+    }
 
     public void Delete(int idTarea)
     {
-        var query = $"DELETE FROM tarea WHERE id = @idTarea";
+        var query = $"UPDATE tarea SET activo = 0 WHERE id = @idTarea";
 
         using (SQLiteConnection conexion = new SQLiteConnection(_cadenaDeConexion))
         {
@@ -179,83 +321,5 @@ public class TareaRepository : ITareaRepository
             conexion.Close();
         }
     }
-
-    public bool AsignarUsuario(int idTarea, int idUsuario)
-    {
-        bool usuarioAsignado = false;
-
-        var query = $"UPDATE tarea SET id_usuario_asignado=@id_usuario_asignado WHERE id = @idTarea";
-
-        using (SQLiteConnection conexion = new SQLiteConnection(_cadenaDeConexion))
-        {
-            conexion.Open();
-            var command = new SQLiteCommand(query, conexion);
-
-            if (idUsuario <= 0)
-            {
-                command.Parameters.Add(new SQLiteParameter("@id_usuario_asignado", null));
-            }
-            else
-            {
-                command.Parameters.Add(new SQLiteParameter("@id_usuario_asignado", idUsuario));
-            }
-
-            command.Parameters.Add(new SQLiteParameter("@idTarea", idTarea));
-
-            if (command.ExecuteNonQuery() > 0)
-            {
-                usuarioAsignado = true;
-            }
-            conexion.Close();
-        }
-        return usuarioAsignado;
-    }
-
-    /*
-        public bool AsignarUsuario(int idTarea, int idUsuario)
-{
-    bool usuarioAsignado = false;
-
-    // Verificar si el usuario existe
-    if (UsuarioExiste(idUsuario))
-    {
-        var query = $"UPDATE tarea SET id_usuario_asignado=@id_usuario_asignado WHERE id = @idTarea";
-
-        using (SQLiteConnection conexion = new SQLiteConnection(_cadenaDeConexion))
-        {
-            conexion.Open();
-            var command = new SQLiteCommand(query, conexion);
-
-            if (idUsuario <= 0)
-            {
-                command.Parameters.Add(new SQLiteParameter("@id_usuario_asignado", DBNull.Value));
-            }
-            else
-            {
-                command.Parameters.Add(new SQLiteParameter("@id_usuario_asignado", idUsuario));
-            }
-
-            command.Parameters.Add(new SQLiteParameter("@idTarea", idTarea));
-
-            if (command.ExecuteNonQuery() > 0)
-            {
-                usuarioAsignado = true;
-            }
-            conexion.Close();
-        }
-    }
-
-    return usuarioAsignado;
-}
-
-private bool UsuarioExiste(int idUsuario)
-{
-    // Realiza una consulta para verificar si el usuario con el id proporcionado existe
-    // Retorna true si existe, false de lo contrario
-    // Esto podría implicar ejecutar un SELECT COUNT(*) FROM Usuario WHERE id = @idUsuario
-}
-
-    */
-
 
 }

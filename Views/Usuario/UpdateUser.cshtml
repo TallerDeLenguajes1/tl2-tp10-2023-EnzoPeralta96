@@ -1,28 +1,30 @@
+@{
+    bool IsAdmin = Context.Request.HttpContext.Session.GetString("Rol") == "admin";
+}
 @model ViewModels.UpdateUserViewModels;
 
+@if (Model.TieneMensajeDeError)
+{
+    <p style="color: red;">@Model.MensajeDeError</p>
+}
 
 <form asp-controller="Usuario" asp-action="UpdateUser">
     <div class="form-group">
-        <input hidden asp-for="@Model.Id">
-        <label asp-for="@Model.Name">Nombre:</label>
+        <input asp-for="@Model.Id">
+        <span asp-validation-for="@Model.Id" class="text-danger"></span>
+
+        <label asp-for="@Model.Name"></label>
         <input asp-for="@Model.Name" class="form-control" />
         <span asp-validation-for="@Model.Name" class="text-danger"></span>
         
-        <label asp-for="@Model.Rol">Rol Usuario</label>
-        <select asp-for="@Model.Rol" asp-items="Html.GetEnumSelectList<tl2_tp10_2023_EnzoPeralta96.Models.RolUsuario>()" class="form-control">
-            <option value="">-- Seleccionar --</option>
-        </select>
-        <span asp-validation-for="@Model.Rol" class="text-danger"></span>
-
-        <label asp-for="@Model.Password">Contraseña</label>
-        <input asp-for="@Model.Password class="form-control">
+        <label asp-for="@Model.Password"></label>
+        <input asp-for="@Model.Password" class=" form-control" />
         <span asp-validation-for="@Model.Password" class="text-danger"></span>
     </div>
 
     <button type="submit" class="btn btn-primary">Enviar</button>
-
 </form>
 
-@section Scripts { <partial name="_ValidationScriptsPartial" /> }
-
-
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

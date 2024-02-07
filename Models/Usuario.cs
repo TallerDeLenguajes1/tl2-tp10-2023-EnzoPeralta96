@@ -13,6 +13,9 @@ public class Usuario
     public string Nombre_de_usuario{get; set;}
     public RolUsuario Rol{get;set;}
     public string Password{get;set;}
+    public int Activo{get;set;}
+
+    
 
     public Usuario()
     {
@@ -28,8 +31,9 @@ public class Usuario
 
     public Usuario(UpdateUserViewModels userUpdate)
     {
+        Id = userUpdate.Id;
         Nombre_de_usuario = userUpdate.Name;
-        Rol = userUpdate.Rol;
+        //Rol = userUpdate.Rol;
         Password = userUpdate.Password;
     }
 

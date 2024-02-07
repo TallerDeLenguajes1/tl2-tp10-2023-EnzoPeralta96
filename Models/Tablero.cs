@@ -6,25 +6,28 @@ public class Tablero
     
     public int Id{get;set;}
     public int Id_usuario_propietario{get;set;}
+    public string Usuario_propietario {get;set;}
     public string Nombre{get;set;}
     public string Descripcion{get;set;}
+    public int Activo{get;set;}
+    
 
     public Tablero()
     {
+        
     }
 
-    public Tablero(CreateTableroViewModels CreTableroVM)
+    public Tablero(CreateTableroViewModels tablero)
     {
-        Id_usuario_propietario = CreTableroVM.Id_usuario_propietario;
-        Nombre = CreTableroVM.Nombre;
-        Descripcion = CreTableroVM.Descripcion;
+        Id_usuario_propietario = tablero.Id_usuario_propietario;
+        Nombre = tablero.Nombre;
+        Descripcion = tablero.Descripcion;
     }
 
-    public Tablero(UpdateTableroViewModels UpTableroVM)
+    public Tablero(UpdateTableroViewModels tablero)
     {
-        Id_usuario_propietario = UpTableroVM.Id_usuario_propietario;
-        Nombre = UpTableroVM.Nombre;
-        Descripcion = UpTableroVM.Descripcion;
+        Nombre = tablero.Nombre;
+        Descripcion = tablero.Descripcion;
     }
 
 

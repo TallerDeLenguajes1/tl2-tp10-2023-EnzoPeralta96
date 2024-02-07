@@ -1,3 +1,13 @@
+*{
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+body {
+  height: 100vh;
+}
+
 html {
   font-size: 14px;
 }
@@ -19,6 +29,28 @@ html {
   min-height: 100%;
 }
 
-body {
-  margin-bottom: 60px;
+header
+{
+  height: 8vh;
+}
+
+
+#contenedor-main
+{
+  height: 85vh;
+}
+
+main
+{
+  width: 100%;
+}
+
+footer
+{
+  height: 7vh;
+}
+
+footer div
+{
+  height: 100%;
 }

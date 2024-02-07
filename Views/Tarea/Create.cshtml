@@ -1,29 +1,33 @@
 @model ViewModels.CreateTareaViewModels;
 
-<form asp-controller="Tarea" asp-action="CreateTarea">
+<form asp-controller="Tarea" asp-action="Create" method="post">
     <div class="form-group">
-        <label asp-for="@Model.Id_tablero">Id Tablero:</label>
 
+        <label asp-for="@Model.NombreTablero"></label>
         <select asp-for="@Model.Id_tablero" class="form-control">
-            @foreach (var tab in Model.Tableros)
+            @foreach (var tablero in Model.Tableros)
             {
-                <option value="@tab.Id">@tab.Id</option>
+                <option value="@tablero.Id">@tablero.Nombre</option>
             }
         </select>
+        <span asp-validation-for="@Model.NombreTablero" class="text-danger"></span>
 
-        <label asp-for="@Model.Nombre">Nombre:</label>
+        <label asp-for="@Model.Nombre"></label>
         <input asp-for="@Model.Nombre" class="form-control" />
+        <span asp-validation-for="@Model.Nombre" class="text-danger"></span>
 
-        <label asp-for="@Model.EstadoTarea">Estado:</label>
+        <label asp-for="@Model.EstadoTarea"></label>
         <select asp-for="@Model.EstadoTarea" asp-items="Html.GetEnumSelectList<Estado>()" class="form-control"></select>
+        <span asp-validation-for="@Model.EstadoTarea" class="text-danger"></span>
 
-        <label asp-for="@Model.Descripcion">Descripcion:</label>
+        <label asp-for="@Model.Descripcion"></label>
         <input asp-for="@Model.Descripcion" class="form-control" />
+        <span asp-validation-for="@Model.Descripcion" class="text-danger"></span>
 
-        <label asp-for="@Model.Color">Color:</label>
+        <label asp-for="@Model.Color"></label>
         <input asp-for="@Model.Color" class="form-control" id="stringColor" name="Color" readonly hidden>
         <input type="color" class="form-control" id="Color" onchange="GuardarColor()">
-
+        <span asp-validation-for="@Model.Color" class="text-danger"></span>
 
     </div>
 

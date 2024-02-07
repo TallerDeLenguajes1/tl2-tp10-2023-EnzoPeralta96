@@ -18,52 +18,57 @@ public class LoginController : Controller
         _usuarioRepository = usuarioRepository;
     }
 
-    private void CreateSession(Usuario userLoged)
-    {
-        HttpContext.Session.SetString("Usuario", userLoged.Nombre_de_usuario);
-        HttpContext.Session.SetString("Password", userLoged.Password.ToString());
-        HttpContext.Session.SetString("Rol", userLoged.Rol.ToString());
-    }
-
     public IActionResult Index()
     {
         return View(new LoginViewModels());
     }
 
     [HttpPost]
-    public IActionResult LoginUser(LoginViewModels userViewModels)
+    public IActionResult LoginUser(LoginViewModels loginVM)
     {
         try
         {
             if (!ModelState.IsValid) return RedirectToAction("Index");
 
-            var user = _usuarioRepository.GetAllUsers().FirstOrDefault(u => u.Nombre_de_usuario == userViewModels.Usuario && u.Password == userViewModels.Password);
+            var user = _usuarioRepository.UserExists(loginVM.Usuario, loginVM.Password);
 
-            if (user == null)
+            if (user == null) /*Consultar*/
             {
-                _logger.LogWarning("Intento de acceso invalido - Usuario:" + userViewModels.Usuario + " Clave ingresada: " + userViewModels.Password);
-                return RedirectToAction("Index");
+                _logger.LogWarning("Intento de acceso invalido - Usuario:" + loginVM.Usuario + " Clave ingresada: " + loginVM.Password);
+                var loginVMMensaje = new LoginViewModels
+                {
+                    MensajeDeError = "Usuario no válido"
+                };
+                return View("Index",loginVMMensaje);
             }
 
             _logger.LogInformation("el usuario " + user.Nombre_de_usuario + " ingreso correctamente");
 
             CreateSession(user);
 
-            return RedirectToRoute(new { controller = "Tablero", action = "Index" });
+            return RedirectToRoute(new { controller = "Home", action = "Index" });
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex.ToString());
+            _logger.LogError($"Error al intentar logear un usuario {ex.ToString()}");
             return BadRequest("Fallo el inicio de sesion");
         }
     }
 
     public IActionResult LogOut()
     {
-        HttpContext.Session.Remove("Usuario");
-        HttpContext.Session.Remove("Password");
+        HttpContext.Session.Remove("Id");
         HttpContext.Session.Remove("Rol");
-        return Redirect("Index");
+        HttpContext.Session.Remove("Autenticado");
+        return RedirectToRoute(new { controller = "Home", action = "Index" });
     }
+
+    private void CreateSession(Usuario userLoged)
+    {
+        HttpContext.Session.SetInt32("Id", userLoged.Id);
+        HttpContext.Session.SetString("Rol", userLoged.Rol.ToString());
+        HttpContext.Session.SetString("Autenticado", "true");
+    }
+
 }
 

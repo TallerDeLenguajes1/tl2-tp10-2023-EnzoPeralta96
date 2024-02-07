@@ -4,11 +4,17 @@ using System.ComponentModel.DataAnnotations;
 
 public class LoginViewModels
 {
-    [Required(ErrorMessage = "Campo requerido")]
-    public string Usuario{get;set;}
+    public string MensajeDeError { get; set; }
 
     [Required(ErrorMessage = "Campo requerido")]
+    [Display(Name ="Usuario:")] 
+    public string Usuario { get; set; }
 
+    [Required(ErrorMessage = "Campo requerido")]
     [DataType(DataType.Password)]
-    public string Password{get;set; }
+    [Display(Name ="Contraseña:")] 
+    public string Password { get; set; }
+
+    public bool TieneMensajeDeError => !string.IsNullOrEmpty(MensajeDeError);
+   
 }

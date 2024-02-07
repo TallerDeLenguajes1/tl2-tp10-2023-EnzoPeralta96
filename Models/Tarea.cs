@@ -17,6 +17,8 @@ public class Tarea
     public string Descripcion{get;set;}
     public string Color{get;set;}
     public int? Id_usuario_asignado{get;set;}
+    public string Usuario_asignado{get;set;}
+    public int Activo{get;set;}
 
     public Tarea()
     {
@@ -24,7 +26,7 @@ public class Tarea
     }
     public Tarea(CreateTareaViewModels creTareaVM)
     {
-        Id_usuario_asignado = creTareaVM.Id_tablero;
+        Id_tablero = creTareaVM.Id_tablero;
         Nombre = creTareaVM.Nombre;
         EstadoTarea = creTareaVM.EstadoTarea;
         Descripcion = creTareaVM.Descripcion;
@@ -38,5 +40,6 @@ public class Tarea
         EstadoTarea = upTareaVM.EstadoTarea;
         Descripcion = upTareaVM.Descripcion;
         Color = upTareaVM.Color;
+        Id_usuario_asignado = upTareaVM.Id_usuario_asignado;
     }
 }

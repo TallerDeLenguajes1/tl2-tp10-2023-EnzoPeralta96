@@ -2,24 +2,29 @@
 
 <form asp-controller="Tablero" asp-action="UpdateTablero">
     <div class="form-group">
-        <input hidden asp-for="@Model.Id">
 
-        <label asp-for="@Model.Nombre">Nombre:</label>
-        <input asp-for="@Model.Nombre" class="form-control"/>
+        <input asp-for="@Model.Id">
+        <span asp-validation-for="@Model.Id" class="text-danger"></span>
 
-        <label asp-for="@Model.Descripcion">Descripcion:</label>
-        <input asp-for="@Model.Descripcion" class="form-control"/>
+        <input asp-for="@Model.Id_usuario_propietario" class="form-control" readonly>
+        <span asp-validation-for="@Model.Id_usuario_propietario" class="text-danger"></span>
 
-        <label asp-for="@Model.Id_usuario_propietario">Id Usuario Propietario:</label> 
-        <select asp-for="@Model.Id_usuario_propietario"  class="form-control">
-            @foreach (var user in Model.Usuarios)
-            {
-                <option value="@user.Id">@user.Id - @user.Nombre_de_usuario </option>
-            }
-        </select>
+        <label asp-for="@Model.Usuario_propietario"></label>
+        <input asp-for="@Model.Usuario_propietario" class="form-control" readonly />
+        <span asp-validation-for="@Model.Usuario_propietario" class="text-danger"></span>
+
+        <label asp-for="@Model.Nombre"></label>
+        <input asp-for="@Model.Nombre" class="form-control" />
+        <span asp-validation-for="@Model.Nombre" class="text-danger"></span>
+
+        <label asp-for="@Model.Descripcion"></label>
+        <input asp-for="@Model.Descripcion" class="form-control" />
+        <span asp-validation-for="@Model.Descripcion" class="text-danger"></span>
     </div>
 
     <button type="submit" class="btn btn-primary">Enviar</button>
 </form>
 
-@section Scripts { <partial name="_ValidationScriptsPartial" /> }
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

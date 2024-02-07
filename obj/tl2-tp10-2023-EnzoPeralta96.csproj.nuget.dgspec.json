@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\user\\Documents\\Facultad\\2doYear\\Taller2\\TP10\\tl2-tp10-2023-EnzoPeralta96\\tl2-tp10-2023-EnzoPeralta96.csproj": {}
+    "C:\\Users\\user\\Documents\\Facultad\\Taller2\\TP10\\tl2-tp10-2023-EnzoPeralta96\\tl2-tp10-2023-EnzoPeralta96.csproj": {}
   },
   "projects": {
-    "C:\\Users\\user\\Documents\\Facultad\\2doYear\\Taller2\\TP10\\tl2-tp10-2023-EnzoPeralta96\\tl2-tp10-2023-EnzoPeralta96.csproj": {
+    "C:\\Users\\user\\Documents\\Facultad\\Taller2\\TP10\\tl2-tp10-2023-EnzoPeralta96\\tl2-tp10-2023-EnzoPeralta96.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\user\\Documents\\Facultad\\2doYear\\Taller2\\TP10\\tl2-tp10-2023-EnzoPeralta96\\tl2-tp10-2023-EnzoPeralta96.csproj",
+        "projectUniqueName": "C:\\Users\\user\\Documents\\Facultad\\Taller2\\TP10\\tl2-tp10-2023-EnzoPeralta96\\tl2-tp10-2023-EnzoPeralta96.csproj",
         "projectName": "tl2-tp10-2023-EnzoPeralta96",
-        "projectPath": "C:\\Users\\user\\Documents\\Facultad\\2doYear\\Taller2\\TP10\\tl2-tp10-2023-EnzoPeralta96\\tl2-tp10-2023-EnzoPeralta96.csproj",
+        "projectPath": "C:\\Users\\user\\Documents\\Facultad\\Taller2\\TP10\\tl2-tp10-2023-EnzoPeralta96\\tl2-tp10-2023-EnzoPeralta96.csproj",
         "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\user\\Documents\\Facultad\\2doYear\\Taller2\\TP10\\tl2-tp10-2023-EnzoPeralta96\\obj\\",
+        "outputPath": "C:\\Users\\user\\Documents\\Facultad\\Taller2\\TP10\\tl2-tp10-2023-EnzoPeralta96\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
