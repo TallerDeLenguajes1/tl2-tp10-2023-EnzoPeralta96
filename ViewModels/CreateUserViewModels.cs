@@ -1,6 +1,6 @@
-using tl2_tp10_2023_EnzoPeralta96.Models;
-using System.ComponentModel.DataAnnotations;
 namespace ViewModels;
+using tl2_tp10_2023_EnzoPeralta96.Models.Usuario;
+using System.ComponentModel.DataAnnotations;
 
 public class CreateUserViewModels
 {
@@ -20,7 +20,4 @@ public class CreateUserViewModels
     [DataType(DataType.Password)]
     [Display(Name = "Contraseña:")]
     public string Password { get; set; }
-
-
-
 }

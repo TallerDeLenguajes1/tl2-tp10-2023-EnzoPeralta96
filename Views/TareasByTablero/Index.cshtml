@@ -18,7 +18,6 @@ else
             <tr>
                 <th hidden>ID</th>
                 <th hidden>ID Tablero</th>
-                <th hidden>ID Propietario Tablero</th>
                 <th>Nombre</th>
                 <th>Estado</th>
                 <th>Descripcion</th>
@@ -37,7 +36,6 @@ else
                 <tr>
                     <td hidden>@tarea.Id</td>
                     <td hidden>@tarea.Id_tablero</td>
-                    <td hidden>@Model.IdPropietarioTablero</td>
                     <td>@tarea.Nombre</td>
                     <td>@tarea.EstadoTarea</td>
                     <td>@tarea.Descripcion</td>
@@ -60,7 +58,6 @@ else
                             <div class="d-flex align-items-center">
                                 <div>
                                     <input type="hidden" name="idTablero" value="@tarea.Id_tablero" />
-                                    <input type="hidden" name="idUsuario" value="@Model.IdPropietarioTablero" />
                                     <input type="hidden" name="idTarea" value="@tarea.Id" />
                                     <select name="EstadoTarea" class="form-select form-select-lg">
                                         <option value="" disabled selected> Seleccionar </option>
@@ -92,7 +89,6 @@ else
                                     <div>
                                         <input type="hidden" name="idTablero" value="@tarea.Id_tablero" />
                                         <input type="hidden" name="idTarea" value="@tarea.Id" />
-                                        <input type="hidden" name="idUsuarioPropietario" value="@Model.IdPropietarioTablero">
                                         <select name="idUsuarioAsignado" class="form-select form-select-lg">
                                             <option value="" disabled selected> Seleccionar </option>
                                             @foreach (var user in Model.Usuarios)
@@ -119,8 +115,8 @@ else
                     else
                     {
                         <td>
-                            <a asp-controller="TareasByTablero" asp-action="RemoveUser" asp-route-id_tablero="@tarea.Id_tablero"
-                                asp-route-idUsuarioPropietario="@Model.IdPropietarioTablero" asp-route-idTarea="@tarea.Id"
+                            <a asp-controller="TareasByTablero" asp-action="RemoveUser" asp-route-idTablero="@tarea.Id_tablero"
+                                asp-route-idTarea="@tarea.Id"
                                 title="Remover usuario" class="d-flex justify-content-center align-items-center">
                                 <button type="button" class="btn btn-warning">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
@@ -133,8 +129,8 @@ else
                         </td>
                     }
                     <td>
-                        <a asp-controller="TareasByTablero" asp-action="UpdateTarea" asp-route-id_tablero="@tarea.Id_tablero"
-                            asp-route-idTarea="@tarea.Id" asp-route-idPropietarioTablero="@Model.IdPropietarioTablero">
+                        <a asp-controller="TareasByTablero" asp-action="UpdateTarea" asp-route-idTablero="@tarea.Id_tablero"
+                            asp-route-idTarea="@tarea.Id">
                             <button type="button" class="btn btn-primary">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                     class="bi bi-pencil-square" viewBox="0 0 16 16">
@@ -148,8 +144,8 @@ else
                     </td>
                     <td>
                         <a asp-controller="TareasByTablero" asp-action="DeleteTarea" asp-route-idTablero="@tarea.Id_tablero"
-                            asp-route-idTarea="@tarea.Id" asp-route-IdPropietarioTablero="@Model.IdPropietarioTablero"
-                            onclick="return confirm('¿Estas seguro que quieres eliminar el elemento?')">
+                            asp-route-idTarea="@tarea.Id"
+                            onclick="return confirm('¿Estas seguro que quieres eliminar la tarea?')">
                             <button type="button" class="btn btn-outline-danger">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                     class="bi bi-trash3" viewBox="0 0 16 16">

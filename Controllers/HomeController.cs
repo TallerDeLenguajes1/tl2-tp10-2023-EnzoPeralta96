@@ -4,11 +4,11 @@ using ViewModels;
 
 namespace tl2_tp10_2023_EnzoPeralta96.Controllers;
 
-public class HomeController : Controller
+public class HomeController : HelperController
 {
     private readonly ILogger<HomeController> _logger;
 
-    public HomeController(ILogger<HomeController> logger)
+    public HomeController(ILogger<HomeController> logger):base(logger)
     {
         _logger = logger;
     }

@@ -1,5 +1,5 @@
-namespace TableroRepositorio;
-using tl2_tp10_2023_EnzoPeralta96.Models;
+namespace tl2_tp10_2023_EnzoPeralta96.Repository.Tablero;
+using tl2_tp10_2023_EnzoPeralta96.Models.Tablero;
 
 public interface ITableroRepository
 {

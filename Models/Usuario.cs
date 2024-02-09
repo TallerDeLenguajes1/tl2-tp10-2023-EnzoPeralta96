@@ -1,6 +1,5 @@
+namespace tl2_tp10_2023_EnzoPeralta96.Models.Usuario;
 using ViewModels;
-
-namespace tl2_tp10_2023_EnzoPeralta96.Models;
 
 public enum RolUsuario
 {
@@ -14,9 +13,7 @@ public class Usuario
     public RolUsuario Rol{get;set;}
     public string Password{get;set;}
     public int Activo{get;set;}
-
     
-
     public Usuario()
     {
 

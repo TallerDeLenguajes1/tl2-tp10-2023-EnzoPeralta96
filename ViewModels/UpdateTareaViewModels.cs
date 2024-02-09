@@ -1,7 +1,8 @@
-using tl2_tp10_2023_EnzoPeralta96.Models;
+namespace ViewModels;
+using tl2_tp10_2023_EnzoPeralta96.Models.Tarea;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
-namespace ViewModels;
+
 
 public class UpdateTareaViewModels
 {
@@ -32,18 +33,16 @@ public class UpdateTareaViewModels
     [HiddenInput(DisplayValue = false)]
     public int? Id_usuario_asignado { get; set; }
 
-    [HiddenInput(DisplayValue = false)]
-    public int Id_Propietario_Tablero { get; set; }
+  
 
     public UpdateTareaViewModels()
     {
     }
 
-    public UpdateTareaViewModels(Tarea tarea, int IdPropietarioTablero)
+    public UpdateTareaViewModels(Tarea tarea)
     {
         Id = tarea.Id;
         Id_tablero = tarea.Id_tablero;
-        Id_Propietario_Tablero = IdPropietarioTablero;
         Nombre = tarea.Nombre;
         EstadoTarea = tarea.EstadoTarea;
         Descripcion = tarea.Descripcion;

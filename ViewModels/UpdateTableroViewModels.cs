@@ -1,8 +1,9 @@
-using tl2_tp10_2023_EnzoPeralta96.Models;
+namespace ViewModels;
+using tl2_tp10_2023_EnzoPeralta96.Models.Tablero;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
 using Microsoft.AspNetCore.Mvc;
-namespace ViewModels;
+
 
 public class UpdateTableroViewModels
 {

@@ -1,7 +1,8 @@
+namespace tl2_tp10_2023_EnzoPeralta96.Repository.Tarea;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
-using tl2_tp10_2023_EnzoPeralta96.Models;
+using tl2_tp10_2023_EnzoPeralta96.Models.Tarea;
 using System.Data.SQLite;
-namespace TareaRepositorio;
+
 public class TareaRepository : ITareaRepository
 {
     private readonly string _cadenaDeConexion;

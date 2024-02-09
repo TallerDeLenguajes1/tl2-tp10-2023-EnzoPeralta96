@@ -1,62 +1,48 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using TareaRepositorio;
-using RepositorioUsuario;
-using TableroRepositorio;
+
 using ViewModels;
-using tl2_tp10_2023_EnzoPeralta96.Models;
+
+using tl2_tp10_2023_EnzoPeralta96.Models.Tarea;
+using tl2_tp10_2023_EnzoPeralta96.Models.Usuario;
+
+using tl2_tp10_2023_EnzoPeralta96.Repository.Usuario;
+using tl2_tp10_2023_EnzoPeralta96.Repository.Tablero;
+using tl2_tp10_2023_EnzoPeralta96.Repository.Tarea;
 
 namespace tl2_tp10_2023_EnzoPeralta96.Controllers;
 
-public class TareasByTableroController : Controller
+public class TareasByTableroController : HelperController
 {
     private readonly ILogger<TareasByTableroController> _logger;
     private readonly ITareaRepository _tareaRepository;
     private readonly IUsuarioRepository _usuarioRepository;
     private readonly ITableroRepository _tableroRepository;
 
-    public TareasByTableroController(ILogger<TareasByTableroController> logger, ITareaRepository tareaRepository, IUsuarioRepository usuarioRepository, ITableroRepository tableroRepository)
+    public TareasByTableroController(ILogger<TareasByTableroController> logger, ITareaRepository tareaRepository, IUsuarioRepository usuarioRepository, ITableroRepository tableroRepository):
+    base(logger,usuarioRepository)
     {
         _logger = logger;
         _tareaRepository = tareaRepository;
         _usuarioRepository = usuarioRepository;
         _tableroRepository = tableroRepository;
     }
-
-
-    private bool IsAdmin()
-    {
-        return HttpContext.Session != null && HttpContext.Session.GetString("Rol") == "admin";
-    }
-    private bool IsLogged()
-    {
-        return HttpContext.Session != null && (HttpContext.Session.GetString("Rol") == "admin" || HttpContext.Session.GetString("Rol") == "operador");
-    }
-
-    private Usuario GetUserLogged()
-    {
-        int idUsuario = (int)HttpContext.Session.GetInt32("Id");
-        return _usuarioRepository.GetUsuarioById(idUsuario);
-    }
-
-    private bool IsOwner(int Id_usuario_propietario)
-    {
-        return GetUserLogged().Id == Id_usuario_propietario;
-    }
-
-    public IActionResult Index(int idTablero, int idPropietarioTablero)
+    
+    public IActionResult Index(int idTablero)
     {
         try
         {
             if (!IsLogged()) return RedirectToRoute(new { controller = "Login", action = "Index" });
 
-            if (!IsAdmin() && !IsOwner(idPropietarioTablero)) return RedirectToRoute(new { controller = "Home", action = "Index" });
+            int idUsuario = _tableroRepository.GetTableroById(idTablero).Id_usuario_propietario;
+
+            if (!IsAdmin() && !IsOwner(idUsuario)) return RedirectToRoute(new { controller = "Home", action = "Index" });
 
             var tareas = _tareaRepository.GetTareasByTablero(idTablero);
 
             var usuarios = _usuarioRepository.GetAllUsers();
 
-            return View(new TareasByTableroViewModels(tareas, usuarios, idPropietarioTablero));
+            return View(new TareasByTableroViewModels(tareas, usuarios));
         }
         catch (System.Exception ex)
         {
@@ -85,15 +71,17 @@ public class TareasByTableroController : Controller
     }
 
     [HttpGet]
-    public IActionResult AddTarea(int idTablero, int Id_usuario_propietario)
+    public IActionResult AddTarea(int idTablero)
     {
         try
         {
             if (!IsLogged()) return RedirectToRoute(new { controller = "Login", action = "Index" });
 
-            if (!IsAdmin() && !IsOwner(Id_usuario_propietario)) return RedirectToRoute(new { controller = "Tablero", action = "Index" });
+            int idUsuario = _tableroRepository.GetTableroById(idTablero).Id_usuario_propietario;
 
-            return View(new CreateTareaViewModels(idTablero, Id_usuario_propietario));
+            if (!IsAdmin() && !IsOwner(idUsuario)) return RedirectToRoute(new { controller = "Tablero", action = "Index" });
+
+            return View(new CreateTareaViewModels(idTablero));
 
         }
         catch (System.Exception ex)
@@ -105,17 +93,17 @@ public class TareasByTableroController : Controller
     }
 
     [HttpPost]
-    public IActionResult AddTarea(CreateTareaViewModels tareaVM)
+    public IActionResult AddTarea(CreateTareaViewModels nuevaTarea)
     {
         try
         {
             if (!IsLogged()) return RedirectToRoute(new { controller = "Login", action = "Index" });
 
-            if (!ModelState.IsValid) return RedirectToAction("AddTarea", new { idTablero = tareaVM.Id_tablero, idPropietarioTablero = tareaVM.Id_Propietario_Tablero });
+            if (!ModelState.IsValid) return RedirectToAction("AddTarea", new { idTablero = nuevaTarea.Id_tablero });
 
-            _tareaRepository.Create(tareaVM.Id_tablero, new Tarea(tareaVM));
+            _tareaRepository.Create(nuevaTarea.Id_tablero, new Tarea(nuevaTarea));
 
-            return RedirectToAction("Index", new { idTablero = tareaVM.Id_tablero, idPropietarioTablero = tareaVM.Id_Propietario_Tablero });
+            return RedirectToAction("Index", new { idTablero = nuevaTarea.Id_tablero });
         }
         catch (System.Exception ex)
         {
@@ -125,17 +113,19 @@ public class TareasByTableroController : Controller
     }
 
     [HttpGet]
-    public IActionResult UpdateTarea(int id_tablero, int idTarea, int IdPropietarioTablero)
+    public IActionResult UpdateTarea(int idTablero, int idTarea)
     {
         try
         {
             if (!IsLogged()) return RedirectToRoute(new { controller = "Login", action = "Index" });
 
-            if (!IsAdmin() && !IsOwner(IdPropietarioTablero)) return RedirectToAction("Index", new { idTablero = id_tablero, idPropietarioTablero = IdPropietarioTablero });
+            int idUsuario = _tableroRepository.GetTableroById(idTablero).Id_usuario_propietario;
+
+            if (!IsAdmin() && !IsOwner(idUsuario)) return RedirectToAction("Index", new { idTablero = idTablero });
 
             var tarea = _tareaRepository.GetTareaById(idTarea);
 
-            return View(new UpdateTareaViewModels(tarea, IdPropietarioTablero));
+            return View(new UpdateTareaViewModels(tarea));
         }
         catch (System.Exception ex)
         {
@@ -145,17 +135,17 @@ public class TareasByTableroController : Controller
     }
 
     [HttpPost]
-    public IActionResult UpdateTarea(UpdateTareaViewModels upTareaVM)
+    public IActionResult UpdateTarea(UpdateTareaViewModels tareaModificada)
     {
         try
         {
             if (!IsLogged()) return RedirectToRoute(new { controller = "Login", action = "Index" });
 
-            if (!ModelState.IsValid) return RedirectToAction("UpdateTarea", new { idTarea = upTareaVM.Id, IdPropietarioTablero = upTareaVM.Id_Propietario_Tablero });
+            if (!ModelState.IsValid) return RedirectToAction("UpdateTarea", new { idTablero = tareaModificada.Id_tablero, idTarea = tareaModificada.Id });
 
-            _tareaRepository.Update(upTareaVM.Id, new Tarea(upTareaVM));
+            _tareaRepository.Update(tareaModificada.Id, new Tarea(tareaModificada));
 
-            return RedirectToAction("Index", new { idTablero = upTareaVM.Id_tablero, idPropietarioTablero = upTareaVM.Id_Propietario_Tablero });
+            return RedirectToAction("Index", new { idTablero = tareaModificada.Id_tablero });
         }
         catch (System.Exception ex)
         {
@@ -166,17 +156,19 @@ public class TareasByTableroController : Controller
     }
 
     [HttpPost]
-    public IActionResult UpdateEstadoTareaPropia(int idTablero, int idUsuario, int idTarea, int EstadoTarea)
+    public IActionResult UpdateEstadoTareaPropia(int idTablero, int idTarea, int EstadoTarea)
     {
         try
         {
             if (!IsLogged()) return RedirectToRoute(new { controller = "Login", action = "Index" });
 
-            if ((!IsAdmin() && !IsOwner(idUsuario)) || !Enum.IsDefined(typeof(Estado), EstadoTarea)) RedirectToAction("Index", new { idTablero = idTablero, idPropietarioTablero = idUsuario });
+            int idUsuario = _tableroRepository.GetTableroById(idTablero).Id_usuario_propietario;
+
+            if ((!IsAdmin() && !IsOwner(idUsuario)) || !Enum.IsDefined(typeof(Estado), EstadoTarea)) RedirectToAction("Index", new { idTablero = idTablero });
 
             _tareaRepository.UpdateEstado(idTarea, (Estado)EstadoTarea);
 
-            return RedirectToAction("Index", new { idTablero = idTablero, idPropietarioTablero = idUsuario });
+            return RedirectToAction("Index", new { idTablero = idTablero });
         }
         catch (System.Exception ex)
         {
@@ -207,17 +199,19 @@ public class TareasByTableroController : Controller
 
 
     [HttpPost]
-    public IActionResult AssignUser(int idTablero, int idTarea, int idUsuarioPropietario, int idUsuarioAsignado)
+    public IActionResult AssignUser(int idTablero, int idTarea, int idUsuarioAsignado)
     {
         try
         {
             if (!IsLogged()) return RedirectToRoute(new { controller = "Login", action = "Index" });
 
-            if ((!IsAdmin() && !IsOwner(idUsuarioPropietario)) || idUsuarioAsignado == 0) return RedirectToAction("Index", new { idTablero = idTablero, idPropietarioTablero = idUsuarioPropietario });
+            int idUsuario = _tableroRepository.GetTableroById(idTablero).Id_usuario_propietario;
+
+            if ((!IsAdmin() && !IsOwner(idUsuario)) || !_usuarioRepository.IsUserValid(idUsuarioAsignado)) return RedirectToAction("Index", new { idTablero = idTablero });
 
             _tareaRepository.AssignUser(idTarea, idUsuarioAsignado);
 
-            return RedirectToAction("Index", new { idTablero = idTablero, idPropietarioTablero = idUsuarioPropietario });
+            return RedirectToAction("Index", new { idTablero = idTablero });
         }
         catch (System.Exception ex)
         {
@@ -227,16 +221,19 @@ public class TareasByTableroController : Controller
     }
 
 
-    public IActionResult RemoveUser(int id_tablero, int idUsuarioPropietario, int idTarea)
+    public IActionResult RemoveUser(int idTablero, int idTarea)
     {
         try
         {
             if (!IsLogged()) return RedirectToRoute(new { controller = "Login", action = "Index" });
-            if (!IsAdmin() && !IsOwner(idUsuarioPropietario)) return RedirectToAction("Index", new { idTablero = id_tablero, idPropietarioTablero = idUsuarioPropietario });
-    
+
+            int idUsuario = _tableroRepository.GetTableroById(idTablero).Id_usuario_propietario;
+
+            if (!IsAdmin() && !IsOwner(idUsuario)) return RedirectToAction("Index", new { idTablero = idTablero });
+
             _tareaRepository.RemoveUser(idTarea);
 
-            return RedirectToAction("Index", new { idTablero = id_tablero, idPropietarioTablero = idUsuarioPropietario });
+            return RedirectToAction("Index", new { idTablero = idTablero });
         }
         catch (System.Exception ex)
         {
@@ -247,22 +244,26 @@ public class TareasByTableroController : Controller
 
     }
 
-    public IActionResult DeleteTarea(int idTablero, int idTarea, int IdPropietarioTablero)
+    public IActionResult DeleteTarea(int idTablero, int idTarea)
     {
         try
         {
-            if (!IsAdmin() && !IsOwner(IdPropietarioTablero)) return RedirectToAction("Index", new { idTablero = idTablero, idPropietarioTablero = IdPropietarioTablero });
+            if (!IsLogged()) return RedirectToRoute(new { controller = "Login", action = "Index" });
+
+            int idUsuario = _tableroRepository.GetTableroById(idTablero).Id_usuario_propietario;
+
+            if (!IsAdmin() && !IsOwner(idUsuario)) return RedirectToAction("Index", new { idTablero = idTablero });
 
             if (_tareaRepository.TareaConUsuarioAsignado(idTarea))
             {
 
                 TempData["MensajeAlerta"] = "No es posible eliminar";
-                return RedirectToAction("Index", new { idTablero = idTablero, idPropietarioTablero = IdPropietarioTablero });
+                return RedirectToAction("Index", new { idTablero = idTablero });
             }
 
             _tareaRepository.Delete(idTarea);
 
-            return RedirectToAction("Index", new { idTablero = idTablero, idPropietarioTablero = IdPropietarioTablero });
+            return RedirectToAction("Index", new { idTablero = idTablero });
         }
         catch (System.Exception ex)
         {

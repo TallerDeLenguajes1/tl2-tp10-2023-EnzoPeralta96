@@ -1,8 +1,9 @@
-using tl2_tp10_2023_EnzoPeralta96.Models;
+namespace ViewModels;
+using tl2_tp10_2023_EnzoPeralta96.Models.Usuario;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
 using Microsoft.AspNetCore.Mvc;
-namespace ViewModels;
+
 
 public class UpdateUserViewModels
 {
@@ -17,10 +18,6 @@ public class UpdateUserViewModels
     [Required(ErrorMessage = "Campo requerido")]
     [Display(Name = "Nombre de usuario:")]
     public string Name { get; set; }
-
-    /*[Required]
-    [Display(Name = "Rol:")]
-    public RolUsuario Rol { get; set; }*/
 
     [Required(ErrorMessage = "Campo requerido")]
     [DataType(DataType.Password)]

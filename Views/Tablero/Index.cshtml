@@ -54,7 +54,7 @@
                             </a>
                         </td>
                         <td>
-                            <a asp-controller="Tablero" asp-action="UpdateTablero" asp-route-idTablero="@tablero.Id"
+                            <a asp-controller="Tablero" asp-action="Update" asp-route-idTablero="@tablero.Id"
                                 asp-route-Id_usuario_propietario="@tablero.Id_usuario_propietario">
                                 <button type="button" class="btn btn-primary">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
@@ -83,7 +83,7 @@
                             </a>
                         </td>
                         <td>
-                            <a asp-controller="Tablero" asp-action="DeleteTablero" asp-route-idTablero="@tablero.Id"
+                            <a asp-controller="Tablero" asp-action="Delete" asp-route-idTablero="@tablero.Id"
                                 asp-route-Id_usuario_propietario="@tablero.Id_usuario_propietario"
                                 onclick="return confirm('¿Estas seguro que quieres eliminar el elemento?')">
                                 <button type="button" class="btn btn-outline-danger">
@@ -106,7 +106,7 @@
 
     @if (IsAdmin)
     {
-        <h3 text-aling:center>Listado los tableros restantes</h3>
+        <h3 text-aling:center>Tableros restantes</h3>
 
         <table class="table table-dark">
             <thead>
@@ -144,7 +144,7 @@
                             </a>
                         </td>
                         <td>
-                            <a asp-controller="Tablero" asp-action="UpdateTablero" asp-route-idTablero="@tablero.Id"
+                            <a asp-controller="Tablero" asp-action="Update" asp-route-idTablero="@tablero.Id"
                                 asp-route-Id_usuario_propietario="@tablero.Id_usuario_propietario">
                                 <button type="button" class="btn btn-primary">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
@@ -173,7 +173,7 @@
                             </a>
                         </td>
                         <td>
-                            <a asp-controller="Tablero" asp-action="DeleteTablero" asp-route-idTablero="@tablero.Id"
+                            <a asp-controller="Tablero" asp-action="Delete" asp-route-idTablero="@tablero.Id"
                                 asp-route-Id_usuario_propietario="@tablero.Id_usuario_propietario"
                                 onclick="return confirm('¿Estas seguro que quieres eliminar el elemento?')">
                                 <button type="button" class="btn btn-outline-danger">

@@ -40,16 +40,16 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/user/Documents/Facultad/Taller2/TP10/tl2-tp10-2023-EnzoPeralta96/Views/Tablero/CreateTablero.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGFibGVyb1xDcmVhdGVUYWJsZXJvLmNzaHRtbA==
+[C:/Users/user/Documents/Facultad/Taller2/TP10/tl2-tp10-2023-EnzoPeralta96/Views/Tablero/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGFibGVyb1xDcmVhdGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/user/Documents/Facultad/Taller2/TP10/tl2-tp10-2023-EnzoPeralta96/Views/Tablero/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGFibGVyb1xJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/user/Documents/Facultad/Taller2/TP10/tl2-tp10-2023-EnzoPeralta96/Views/Tablero/UpdateTablero.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGFibGVyb1xVcGRhdGVUYWJsZXJvLmNzaHRtbA==
+[C:/Users/user/Documents/Facultad/Taller2/TP10/tl2-tp10-2023-EnzoPeralta96/Views/Tablero/Update.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGFibGVyb1xVcGRhdGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/user/Documents/Facultad/Taller2/TP10/tl2-tp10-2023-EnzoPeralta96/Views/TareasByTablero/AddTarea.cshtml]
@@ -80,16 +80,20 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGFyZWFcVGFyZWFzQXNpZ25hZGFzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/user/Documents/Facultad/Taller2/TP10/tl2-tp10-2023-EnzoPeralta96/Views/Usuario/CreateUser.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXN1YXJpb1xDcmVhdGVVc2VyLmNzaHRtbA==
+[C:/Users/user/Documents/Facultad/Taller2/TP10/tl2-tp10-2023-EnzoPeralta96/Views/Tarea/Update.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGFyZWFcVXBkYXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/user/Documents/Facultad/Taller2/TP10/tl2-tp10-2023-EnzoPeralta96/Views/Usuario/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXN1YXJpb1xDcmVhdGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/user/Documents/Facultad/Taller2/TP10/tl2-tp10-2023-EnzoPeralta96/Views/Usuario/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXN1YXJpb1xJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/user/Documents/Facultad/Taller2/TP10/tl2-tp10-2023-EnzoPeralta96/Views/Usuario/UpdateUser.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXN1YXJpb1xVcGRhdGVVc2VyLmNzaHRtbA==
+[C:/Users/user/Documents/Facultad/Taller2/TP10/tl2-tp10-2023-EnzoPeralta96/Views/Usuario/Update.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXN1YXJpb1xVcGRhdGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/user/Documents/Facultad/Taller2/TP10/tl2-tp10-2023-EnzoPeralta96/Views/_ViewImports.cshtml]

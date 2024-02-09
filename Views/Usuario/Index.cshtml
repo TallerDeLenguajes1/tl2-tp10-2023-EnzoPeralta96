@@ -25,7 +25,7 @@
             <td>@Model.Usuario.Password</td>
             <td>@Model.Usuario.Rol</td>
             <td>
-                <a asp-controller="Usuario" asp-action="UpdateUser" asp-route-idUsuario="@Model.Usuario.Id">
+                <a asp-controller="Usuario" asp-action="Update" asp-route-idUsuario="@Model.Usuario.Id">
                     <button type="button" class="btn btn-primary">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                             class="bi bi-pencil-square" viewBox="0 0 16 16">
@@ -43,7 +43,7 @@
 
 @if (IsAdmin)
 {
-    <h2 text-aling:center>Listado de usuarios</h2>
+    <h2 text-aling:center>Listado de usuarios restantes</h2>
     <table class="table table-dark">
         <thead>
             <tr>
@@ -64,7 +64,7 @@
                     <td>@usuario.Password</td>
                     <td>@usuario.Rol</td>
                     <td>
-                        <a asp-controller="Usuario" asp-action="UpdateUser" asp-route-idUsuario="@usuario.Id">
+                        <a asp-controller="Usuario" asp-action="Update" asp-route-idUsuario="@usuario.Id">
                             <button type="button" class="btn btn-primary">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                     class="bi bi-pencil-square" viewBox="0 0 16 16">
@@ -79,7 +79,7 @@
                     @if (IsAdmin)
                     {
                         <td>
-                            <a asp-controller="Usuario" asp-action="DeleteUser" asp-route-idUsuario="@usuario.Id"
+                            <a asp-controller="Usuario" asp-action="Delete" asp-route-idUsuario="@usuario.Id"
                                 onclick="return confirm('¿Estas seguro que quieres eliminar el elemento?')">
                                 <button type="button" class="btn btn-outline-danger">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
@@ -97,10 +97,6 @@
     </table>
 
 }
-
-
-
-
 
 
 @if (TempData.ContainsKey("MensajeAlerta"))

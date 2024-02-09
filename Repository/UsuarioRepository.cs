@@ -1,8 +1,7 @@
+namespace tl2_tp10_2023_EnzoPeralta96.Repository.Usuario;
 using System.Data.SqlClient;
 using System.Data.SQLite;
-using tl2_tp10_2023_EnzoPeralta96.Models;
-namespace RepositorioUsuario;
-
+using tl2_tp10_2023_EnzoPeralta96.Models.Usuario;
 public class UsuarioRepository : IUsuarioRepository
 {
     private readonly string _cadenaDeConexion;
@@ -84,6 +83,24 @@ public class UsuarioRepository : IUsuarioRepository
         return nameInUse;
     }
 
+    public bool IsUserValid(int idUsuario)
+    {
+        var query = $"SELECT COUNT(id) FROM usuario WHERE id = @idUsuario AND id IN (SELECT id FROM usuario)";
+        bool userValid = false;
+        using (SQLiteConnection conexion = new SQLiteConnection(_cadenaDeConexion))
+        {
+            conexion.Open();
+            var command = new SQLiteCommand(query, conexion);
+            command.Parameters.Add(new SQLiteParameter("@idUsuario", idUsuario));
+
+            int count = Convert.ToInt32(command.ExecuteScalar());
+
+            userValid = count > 0;
+
+            conexion.Close();
+        }
+        return userValid;
+    }
 
     public void Create(Usuario usuario)
     {
@@ -158,7 +175,7 @@ public class UsuarioRepository : IUsuarioRepository
             conexion.Open();
             var command = new SQLiteCommand(query, conexion);
             command.Parameters.Add(new SQLiteParameter("@idUsuario", idUsuario));
-            
+
             using (SQLiteDataReader reader = command.ExecuteReader())
             {
                 while (reader.Read())
@@ -186,7 +203,7 @@ public class UsuarioRepository : IUsuarioRepository
         {
             conexion.Open();
             var command = new SQLiteCommand(query, conexion);
-            
+
             using (SQLiteDataReader reader = command.ExecuteReader())
             {
                 while (reader.Read())
@@ -229,7 +246,7 @@ public class UsuarioRepository : IUsuarioRepository
         }
     }
 
-   
+
 
     private void deleteTableroByUsuario(int idUsuario)
     {
@@ -259,8 +276,10 @@ public class UsuarioRepository : IUsuarioRepository
         }
     }
 
-
-
-
-
 }
+
+
+
+
+
+

@@ -1,7 +1,8 @@
-using tl2_tp10_2023_EnzoPeralta96.Models;
+namespace ViewModels;
+using tl2_tp10_2023_EnzoPeralta96.Models.Usuario;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
-namespace ViewModels;
+
 
 public class CreateTableroViewModels
 {
@@ -25,9 +26,9 @@ public class CreateTableroViewModels
     {
     }
 
-    public CreateTableroViewModels(Usuario UserLogged)
+    public CreateTableroViewModels(Usuario User)
     {
-        Id_usuario_propietario = UserLogged.Id;
-        Usuario_propietario = UserLogged.Nombre_de_usuario;
+        Id_usuario_propietario = User.Id;
+        Usuario_propietario = User.Nombre_de_usuario;
     }
 }

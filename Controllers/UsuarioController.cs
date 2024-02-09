@@ -1,47 +1,30 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using RepositorioUsuario;
 using ViewModels;
 
-using tl2_tp10_2023_EnzoPeralta96.Models;
-using TareaRepositorio;
-using TableroRepositorio;
-using Microsoft.AspNetCore.Identity;
+using tl2_tp10_2023_EnzoPeralta96.Models.Usuario;
+
+using tl2_tp10_2023_EnzoPeralta96.Repository.Usuario;
+using tl2_tp10_2023_EnzoPeralta96.Repository.Tablero;
+using tl2_tp10_2023_EnzoPeralta96.Repository.Tarea;
+
+
 namespace tl2_tp10_2023_EnzoPeralta96.Controllers;
 
-public class UsuarioController : Controller
+public class UsuarioController : HelperController
 {
     private readonly ILogger<UsuarioController> _logger;
     private readonly IUsuarioRepository _usuarioRepository;
     private readonly ITableroRepository _tableroRepository;
     private readonly ITareaRepository _tareaRepository;
 
-    public UsuarioController(ILogger<UsuarioController> logger, IUsuarioRepository userRepository, ITareaRepository tareaRepository, ITableroRepository tableroRepository)
+    public UsuarioController(ILogger<UsuarioController> logger, IUsuarioRepository userRepository, ITareaRepository tareaRepository, ITableroRepository tableroRepository):
+    base(logger, userRepository)
     {
         _logger = logger;
         _usuarioRepository = userRepository;
         _tareaRepository = tareaRepository;
         _tableroRepository = tableroRepository;
-    }
-
-    private bool IsAdmin()
-    {
-        return HttpContext.Session != null && HttpContext.Session.GetString("Rol") == "admin";
-    }
-    private bool IsLogged()
-    {
-        return HttpContext.Session != null && (HttpContext.Session.GetString("Rol") == "admin" || HttpContext.Session.GetString("Rol") == "operador");
-    }
-
-    private Usuario GetUserLogged()
-    {
-        int idUsuario = (int)HttpContext.Session.GetInt32("Id");
-        return _usuarioRepository.GetUsuarioById(idUsuario);
-    }
-
-    private bool IsOwner(int IdUsuario)
-    {
-        return GetUserLogged().Id == IdUsuario;
     }
 
     public IActionResult Index()
@@ -71,7 +54,7 @@ public class UsuarioController : Controller
 
 
     [HttpGet]
-    public IActionResult CreateUser()
+    public IActionResult Create()
     {
         try
         {
@@ -88,7 +71,7 @@ public class UsuarioController : Controller
 
 
     [HttpPost]
-    public IActionResult CreateUser(CreateUserViewModels user)
+    public IActionResult Create(CreateUserViewModels user)
     {
         try
         {
@@ -102,10 +85,10 @@ public class UsuarioController : Controller
                 {
                     MensajeDeError = "Nombre de usuario en uso"
                 };
-                return View("CreateUser", userVmMensaje);
+                return View("Create", userVmMensaje);
             }
 
-            if (!ModelState.IsValid) return RedirectToAction("CreateUser");
+            if (!ModelState.IsValid) return RedirectToAction("Create");
 
             _usuarioRepository.Create(new Usuario(user));
 
@@ -121,7 +104,7 @@ public class UsuarioController : Controller
 
 
     [HttpGet]
-    public IActionResult UpdateUser(int idUsuario)
+    public IActionResult Update(int idUsuario)
     {
         try
         {
@@ -142,22 +125,20 @@ public class UsuarioController : Controller
 
     }
 
-
     [HttpPost]
-    public IActionResult UpdateUser(UpdateUserViewModels user)
+    public IActionResult Update(UpdateUserViewModels user)
     {
         try
         {
             if (!IsLogged()) return RedirectToRoute(new { controller = "Login", action = "Index" });
-            //Hace falta verificar el usuario o el admin aquí
-
+       
             if (_usuarioRepository.NameInUseUpdate(user.Name, user.Id))
             {
                 var userVmMensaje = new UpdateUserViewModels
                 {
                     MensajeDeError = "Nombre de usuario en uso"
                 };
-                return View("UpdateUser", userVmMensaje);
+                return View("Update", userVmMensaje);
             }
 
             if (!ModelState.IsValid) return RedirectToAction("Index");
@@ -173,7 +154,7 @@ public class UsuarioController : Controller
         }
     }
 
-    public IActionResult DeleteUser(int idUsuario)
+    public IActionResult Delete(int idUsuario)
     {
         try
         {
@@ -204,7 +185,6 @@ public class UsuarioController : Controller
             return BadRequest();
         }
     }
-
 
     public IActionResult Privacy()
     {

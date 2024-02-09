@@ -1,6 +1,7 @@
 namespace ViewModels;
 using System.ComponentModel.DataAnnotations;
-using tl2_tp10_2023_EnzoPeralta96.Models;
+using tl2_tp10_2023_EnzoPeralta96.Models.Tablero;
+using tl2_tp10_2023_EnzoPeralta96.Models.Tarea;
 using Microsoft.AspNetCore.Mvc;
 
 public class CreateTareaViewModels
@@ -30,18 +31,16 @@ public class CreateTareaViewModels
     [Display(Name = "Color:")]
     public string Color { get; set; }
 
-    [HiddenInput(DisplayValue = false)]
-    public int Id_Propietario_Tablero { get; set; }
 
     public List<Tablero> Tableros{get;set;}
     public CreateTareaViewModels()
     {
     }
 
-    public CreateTareaViewModels(int idTablero, int idPropietarioTablero)
+    public CreateTareaViewModels(int idTablero)
     {
         Id_tablero = idTablero;
-        Id_Propietario_Tablero = idPropietarioTablero;
+       
     }
 
     public CreateTareaViewModels(List<Tablero> tableros)

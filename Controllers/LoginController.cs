@@ -1,18 +1,16 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using RepositorioUsuario;
 using ViewModels;
-
-using tl2_tp10_2023_EnzoPeralta96.Models;
+using tl2_tp10_2023_EnzoPeralta96.Models.Usuario;
+using tl2_tp10_2023_EnzoPeralta96.Repository.Usuario;
 namespace tl2_tp10_2023_EnzoPeralta96.Controllers;
-
-
-public class LoginController : Controller
+public class LoginController : HelperController
 {
     private readonly ILogger<LoginController> _logger;
     private readonly IUsuarioRepository _usuarioRepository;
 
-    public LoginController(ILogger<LoginController> logger, IUsuarioRepository usuarioRepository)
+    public LoginController(ILogger<LoginController> logger, IUsuarioRepository usuarioRepository):
+    base(logger, usuarioRepository)
     {
         _logger = logger;
         _usuarioRepository = usuarioRepository;
@@ -61,13 +59,6 @@ public class LoginController : Controller
         HttpContext.Session.Remove("Rol");
         HttpContext.Session.Remove("Autenticado");
         return RedirectToRoute(new { controller = "Home", action = "Index" });
-    }
-
-    private void CreateSession(Usuario userLoged)
-    {
-        HttpContext.Session.SetInt32("Id", userLoged.Id);
-        HttpContext.Session.SetString("Rol", userLoged.Rol.ToString());
-        HttpContext.Session.SetString("Autenticado", "true");
     }
 
 }

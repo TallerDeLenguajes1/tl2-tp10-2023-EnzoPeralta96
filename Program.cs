@@ -1,6 +1,6 @@
-using RepositorioUsuario;
-using TableroRepositorio;
-using TareaRepositorio;
+using tl2_tp10_2023_EnzoPeralta96.Repository.Usuario;
+using tl2_tp10_2023_EnzoPeralta96.Repository.Tablero;
+using tl2_tp10_2023_EnzoPeralta96.Repository.Tarea;
 
 var builder = WebApplication.CreateBuilder(args);
 

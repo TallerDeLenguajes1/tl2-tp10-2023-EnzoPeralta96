@@ -1,5 +1,5 @@
 namespace ViewModels;
-using tl2_tp10_2023_EnzoPeralta96.Models;
+using tl2_tp10_2023_EnzoPeralta96.Models.Usuario;
 
 class UsuariosViewModels
 {

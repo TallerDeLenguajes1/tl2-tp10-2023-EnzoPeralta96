@@ -1,24 +1,41 @@
 @model ViewModels.CreateTableroViewModels;
 
-<form asp-controller="Tablero" asp-action="CreateTablero">
-    <div class="form-group">
+<h2>Crear tablero</h2>
+
+<p>Ingrese los siguientes datos:</p>
+
+<form asp-controller="Tablero" asp-action="Create">
+
+    <div class="mb-3">
         <input asp-for="@Model.Id_usuario_propietario" class="form-control">
         <span asp-validation-for="@Model.Id_usuario_propietario" class="text-danger"></span>
+    </div>
 
+    <div class="mb-3">
         <label asp-for="@Model.Usuario_propietario"></label>
-        <input asp-for="@Model.Usuario_propietario" class="form-control" readonly/>
+        <input asp-for="@Model.Usuario_propietario" class="form-control" readonly />
         <span asp-validation-for="@Model.Usuario_propietario" class="text-danger"></span>
 
+    </div>
+
+    <div class="mb-3">
         <label asp-for="@Model.Nombre"></label>
         <input asp-for="@Model.Nombre" class="form-control" />
         <span asp-validation-for="@Model.Nombre" class="text-danger"></span>
+    </div>
 
+    <div class="mb-3">
         <label asp-for="@Model.Descripcion"></label>
         <input asp-for="@Model.Descripcion" class="form-control" />
         <span asp-validation-for="@Model.Descripcion" class="text-danger"></span>
     </div>
 
     <button type="submit" class="btn btn-primary">Enviar</button>
+    <a asp-controller="Tablero" asp-action="Index">
+        <button type="button" class="btn btn-danger">
+            Cancelar
+        </button>
+    </a>
 </form>
 
 @section Scripts {
