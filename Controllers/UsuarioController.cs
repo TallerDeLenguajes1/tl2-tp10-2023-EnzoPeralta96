@@ -18,7 +18,7 @@ public class UsuarioController : HelperController
     private readonly ITableroRepository _tableroRepository;
     private readonly ITareaRepository _tareaRepository;
 
-    public UsuarioController(ILogger<UsuarioController> logger, IUsuarioRepository userRepository, ITareaRepository tareaRepository, ITableroRepository tableroRepository):
+    public UsuarioController(ILogger<UsuarioController> logger, IUsuarioRepository userRepository, ITareaRepository tareaRepository, ITableroRepository tableroRepository) :
     base(logger, userRepository)
     {
         _logger = logger;
@@ -33,17 +33,26 @@ public class UsuarioController : HelperController
         {
             if (!IsLogged()) return RedirectToRoute(new { controller = "Login", action = "Index" });
 
+            UsuariosViewModels model = null;
+
             if (IsAdmin())
             {
                 var user = GetUserLogged();
                 var users = _usuarioRepository.GetRestUsers(user.Id);
-                return View(new UsuariosViewModels(users,user));
+                model = new UsuariosViewModels(user, users);
+
             }
             else
             {
                 var user = GetUserLogged();
-                return View(new UsuariosViewModels(user));
+                model = new UsuariosViewModels(user);
             }
+
+            model.MensajeExito = TempData["MensajeExito"] as string;
+            model.MensajeError = TempData["MensajeError"] as string;
+
+            return View(model);
+
         }
         catch (System.Exception ex)
         {
@@ -51,7 +60,6 @@ public class UsuarioController : HelperController
             return BadRequest();
         }
     }
-
 
     [HttpGet]
     public IActionResult Create()
@@ -81,16 +89,18 @@ public class UsuarioController : HelperController
 
             if (_usuarioRepository.NameInUse(user.Name))
             {
-                var userVmMensaje = new CreateUserViewModels
+                var userMensajeError = new CreateUserViewModels
                 {
-                    MensajeDeError = "Nombre de usuario en uso"
+                    MensajeDeError = "Nombre de usuario en uso, elija otro nombre por favor."
                 };
-                return View("Create", userVmMensaje);
+                return View("Create", userMensajeError);
             }
 
             if (!ModelState.IsValid) return RedirectToAction("Create");
 
             _usuarioRepository.Create(new Usuario(user));
+
+            TempData["MensajeExito"] = "Usuario creado con éxito!";
 
             return RedirectToAction("Index");
         }
@@ -131,12 +141,12 @@ public class UsuarioController : HelperController
         try
         {
             if (!IsLogged()) return RedirectToRoute(new { controller = "Login", action = "Index" });
-       
+
             if (_usuarioRepository.NameInUseUpdate(user.Name, user.Id))
             {
                 var userVmMensaje = new UpdateUserViewModels
                 {
-                    MensajeDeError = "Nombre de usuario en uso"
+                    MensajeDeError = "Nombre de usuario en uso, elija otro nombre por favor."
                 };
                 return View("Update", userVmMensaje);
             }
@@ -144,6 +154,8 @@ public class UsuarioController : HelperController
             if (!ModelState.IsValid) return RedirectToAction("Index");
 
             _usuarioRepository.Update(user.Id, new Usuario(user));
+
+            TempData["MensajeExito"] = "Usuario modificado con éxito!";
 
             return RedirectToAction("Index");
         }
@@ -164,18 +176,25 @@ public class UsuarioController : HelperController
 
             if (GetUserLogged().Id == idUsuario)
             {
-                TempData["MensajeAlerta"] = "No es posible autoeliminarse";
+                TempData["MensajeError"] = "No es posible autoeliminarse";
                 return RedirectToAction("Index");
             }
 
-            if (_tareaRepository.UsuarioTieneTareasAsignadas(idUsuario) || _tableroRepository.TableroByUserConTareasAsignadas(idUsuario))
+            if (_tareaRepository.UsuarioTieneTareasAsignadas(idUsuario))
             {
-                TempData["MensajeAlerta"] = "No es posible eliminar";
+                TempData["MensajeError"] = "No es posible eliminar, usuario con tareas asignadas";
                 return RedirectToAction("Index");
             }
 
+            if (_tableroRepository.TableroByUserConTareasAsignadas(idUsuario))
+            {
+                TempData["MensajeError"] = "No es posible eliminar, usuario tiene tablero con tareas asignadas";
+                return RedirectToAction("Index");
+            }
 
             _usuarioRepository.Delete(idUsuario);
+
+            TempData["MensajeExito"] = "Usuario eliminado con éxito!";
 
             return RedirectToAction("Index");
         }

@@ -8,6 +8,7 @@ public class CreateUserViewModels
 
     public bool TieneMensajeDeError => !string.IsNullOrEmpty(MensajeDeError);
 
+   
     [Required(ErrorMessage = "Campo requerido")]
     [Display(Name = "Nombre de usuario:")]
     public string Name { get; set; }

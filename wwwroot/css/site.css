@@ -12,6 +12,9 @@ html {
   font-size: 14px;
 }
 
+
+
+
 /*Sacar puntos de los enlaces*/
 
 @media (min-width: 768px) {
@@ -53,4 +56,8 @@ footer
 footer div
 {
   height: 100%;
+}
+
+.mensaje-oculto {
+  display: none;
 }

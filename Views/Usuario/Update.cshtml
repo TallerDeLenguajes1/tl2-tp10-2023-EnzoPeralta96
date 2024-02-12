@@ -9,8 +9,11 @@
 
 @if (Model.TieneMensajeDeError)
 {
-    <p style="color: red;">@Model.MensajeDeError</p>
+    <div id="mensajeTemporal" class="alert alert-warning">
+        @Model.MensajeDeError
+    </div>
 }
+
 <div style="border: 1px solid #ccc; padding: 20px; border-radius: 5px;">
     <form asp-controller="Usuario" asp-action="Update">
         <div class="mb-3">
@@ -42,8 +45,17 @@
 </div>
 
 
-
-
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var mensajeTemporal = document.getElementById('mensajeTemporal');
+        if (mensajeTemporal) {
+            setTimeout(function () {
+                mensajeTemporal.classList.add('mensaje-oculto');
+            }, 10000);
+        }
+    });
+</script>

@@ -1,12 +1,25 @@
 @{
     ViewData["Title"] = "Usuarios";
     bool IsAdmin = Context.Request.HttpContext.Session.GetString("Rol") == "admin";
-    //Consultar
 }
 
 @model ViewModels.UsuariosViewModels;
 
 <h2 text-aling:center>Mi Usuario</h2>
+
+@if (Model.TieneMensajeExito)
+{
+    <div id="mensajeTemporal" class="alert alert-success">
+        @Model.MensajeExito
+    </div>
+}
+
+@if (Model.TieneMensajeError)
+{
+    <div id="mensajeTemporal" class="alert alert-danger">
+        @Model.MensajeError
+    </div>
+}
 
 <table class="table table-dark">
     <thead>
@@ -99,9 +112,13 @@
 }
 
 
-@if (TempData.ContainsKey("MensajeAlerta"))
-{
-    <script>
-        alert('@TempData["MensajeAlerta"]');
-    </script>
-}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var mensajeTemporal = document.getElementById('mensajeTemporal');
+        if (mensajeTemporal) {
+            setTimeout(function () {
+                mensajeTemporal.classList.add('mensaje-oculto');
+            }, 10000);
+        }
+    });
+</script>
