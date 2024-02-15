@@ -8,7 +8,7 @@ public interface ITableroRepository
   public Tablero GetTableroById(int IdTablero);
   public List<Tablero> GetRestTableros(int IdUsuario);
   public List<Tablero> GetTableroByUser(int IdUsuario);
-  public List<Tablero> GetTableroByTareas(int IdUsuario);
+  public List<Tablero> GetTableroByTareasAsignadas(int IdUsuario);
   public bool TableroByUserConTareasAsignadas(int IdUsuario);
   public bool TableroConTareasAsignadas(int IdTablero);
   public void Delete(int IdTablero);

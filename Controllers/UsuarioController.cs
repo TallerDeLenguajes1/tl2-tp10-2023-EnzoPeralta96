@@ -61,6 +61,35 @@ public class UsuarioController : HelperController
         }
     }
 
+    public IActionResult AllUsers()
+    {
+        try
+        {
+            if (!IsLogged()) return RedirectToRoute(new { controller = "Login", action = "Index" });
+
+            if (!IsAdmin()) return RedirectToRoute(new { controller = "Home", action = "Index" });
+
+            UsuariosViewModels model = null;
+
+            var user = GetUserLogged();
+            var users = _usuarioRepository.GetRestUsers(user.Id);
+            
+            model = new UsuariosViewModels(user, users)
+            {
+                MensajeExito = TempData["MensajeExito"] as string,
+                MensajeError = TempData["MensajeError"] as string
+            };
+
+            return View(model);
+
+        }
+        catch (System.Exception ex)
+        {
+            _logger.LogError(ex.ToString());
+            return BadRequest();
+        }
+    }
+
     [HttpGet]
     public IActionResult Create()
     {
@@ -100,9 +129,9 @@ public class UsuarioController : HelperController
 
             _usuarioRepository.Create(new Usuario(user));
 
-            TempData["MensajeExito"] = "Usuario creado con éxito!";
+            TempData["MensajeExito"] = "El usuario " + "<b>" + user.Name + "</b>" + "  fue creado con éxito!";
 
-            return RedirectToAction("Index");
+            return RedirectToAction("AllUsers");
         }
         catch (System.Exception ex)
         {
@@ -153,11 +182,13 @@ public class UsuarioController : HelperController
 
             if (!ModelState.IsValid) return RedirectToAction("Index");
 
-            _usuarioRepository.Update(user.Id, new Usuario(user));
+            var usuario = new Usuario(user);
 
-            TempData["MensajeExito"] = "Usuario modificado con éxito!";
+            _usuarioRepository.Update(usuario.Id, usuario);
 
-            return RedirectToAction("Index");
+            TempData["MensajeExito"] = " El usuario " + "<b>" + user.Name + "</b>" + " fue modificado con éxito!";
+
+            return IsOwner(usuario.Id) ? RedirectToAction("Index") : RedirectToAction("AllUsers");
         }
         catch (System.Exception ex)
         {
@@ -174,6 +205,8 @@ public class UsuarioController : HelperController
 
             if (!IsAdmin()) return RedirectToAction("Index");
 
+            string userName = _usuarioRepository.GetUsuarioById(idUsuario).Nombre_de_usuario;
+
             if (GetUserLogged().Id == idUsuario)
             {
                 TempData["MensajeError"] = "No es posible autoeliminarse";
@@ -182,21 +215,21 @@ public class UsuarioController : HelperController
 
             if (_tareaRepository.UsuarioTieneTareasAsignadas(idUsuario))
             {
-                TempData["MensajeError"] = "No es posible eliminar, usuario con tareas asignadas";
-                return RedirectToAction("Index");
+                TempData["MensajeError"] = "No es posible eliminar, el usuario " + "<b>" + userName + "</b>" + " tiene tareas asignadas";
+                return RedirectToAction("AllUsers");
             }
 
             if (_tableroRepository.TableroByUserConTareasAsignadas(idUsuario))
             {
-                TempData["MensajeError"] = "No es posible eliminar, usuario tiene tablero con tareas asignadas";
-                return RedirectToAction("Index");
+                TempData["MensajeError"] = "No es posible eliminar, el usuario " + "<b>" + userName + "</b>" + " tiene tablero con tareas asignadas";
+                return RedirectToAction("AllUsers");
             }
 
             _usuarioRepository.Delete(idUsuario);
 
-            TempData["MensajeExito"] = "Usuario eliminado con éxito!";
+            TempData["MensajeExito"] = "El usuario " + "<b>" + userName + "</b>" + " fue eliminado con éxito!";
 
-            return RedirectToAction("Index");
+            return RedirectToAction("AllUsers");
         }
         catch (System.Exception ex)
         {

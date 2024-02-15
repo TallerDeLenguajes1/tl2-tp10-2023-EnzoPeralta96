@@ -135,9 +135,9 @@ public class TableroRepository : ITableroRepository
         return tableros;
     }
 
-    public List<Tablero> GetTableroByTareas(int IdUsuario)
+    public List<Tablero> GetTableroByTareasAsignadas(int IdUsuario)
     {
-        var query = "SELECT DISTINCT tab.id, id_usuario_propietario, nombre_de_usuario, tab.nombre, tab.descripcion FROM tablero tab INNER JOIN usuario ON tab.id_usuario_propietario = usuario.id INNER JOIN tarea ON tab.id = tarea.id_tablero WHERE tarea.id_usuario_asignado = @IdUsuario AND tab.activo = 1";
+        var query = "SELECT DISTINCT tab.id, id_usuario_propietario, nombre_de_usuario, tab.nombre, tab.descripcion FROM tablero tab INNER JOIN usuario ON tab.id_usuario_propietario = usuario.id INNER JOIN tarea ON tab.id = tarea.id_tablero WHERE tarea.id_usuario_asignado = @IdUsuario AND tab.activo = 1 AND tarea.activo = 1";
 
         var tableros = new List<Tablero>();
         using (SQLiteConnection conexion = new SQLiteConnection(_cadenaDeConexion))

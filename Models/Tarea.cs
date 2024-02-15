@@ -35,6 +35,7 @@ public class Tarea
 
     public Tarea(UpdateTareaViewModels upTareaVM)
     {
+        Id = upTareaVM.Id;
         Id_tablero = upTareaVM.Id_tablero;
         Nombre = upTareaVM.Nombre;    
         EstadoTarea = upTareaVM.EstadoTarea;

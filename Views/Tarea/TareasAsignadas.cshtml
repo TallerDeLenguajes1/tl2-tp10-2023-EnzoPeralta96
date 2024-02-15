@@ -4,86 +4,116 @@
 
 @model ViewModels.TareasByUsuarioViewModels;
 
-<h2 text-aling:center>Tareas asignadas</h2>
+<div class="contenedor">
 
-@if (Model.TareasAsignadas.Count() == 0)
-{
-    <p>Aun no te asignaron tareas.</p>
-}
-else
-{
-    <table class="table table-dark">
-        <thead>
-            <tr>
-                <th hidden>ID</th>
-                <th hidden>ID Tablero</th>
-                <th>Nombre</th>
-                <th>Estado</th>
-                <th>Descripcion</th>
-                <th>Color</th>
-                <th hidden>Id Usuario Asignado</th>
-                <th>Usuario asignado</th>
-                <th>Actualizar Estado</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var tarea in Model.TareasAsignadas)
-            {
-                <tr>
-                    <td hidden>@tarea.Id</td>
-                    <td hidden>@tarea.Id_tablero</td>
-                    <td>@tarea.Nombre</td>
-                    <td>@tarea.EstadoTarea</td>
-                    <td>@tarea.Descripcion</td>
-                    <td>
-                        <input type="color" asp-for="@tarea.Color" name="colorInput" value="@tarea.Color" disabled>
-                    </td>
-                    <td hidden>
-                        @tarea.Id_usuario_asignado
-                    </td>
-                    @if (string.IsNullOrEmpty(@tarea.Usuario_asignado))
+    @if (Model.TieneMensajeExito)
+    {
+        <div id="mensajeTemporal" class="alert alert-success">
+            @Html.Raw(Model.MensajeExito)
+        </div>
+    }
+
+    @if (Model.TieneMensajeAdvertencia)
+    {
+        <div id="mensajeTemporal" class="alert alert-warning">
+            @Html.Raw(Model.MensajeAdvertencia)
+        </div>
+    }
+
+    <h2 text-aling:center>Tareas asignadas</h2>
+
+    @if (Model.TareasAsignadas.Count() == 0)
+    {
+        <p>Aun no te asignaron tareas.</p>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-dark tabla4">
+                <thead>
+                    <tr class="tabla4-encabezado">
+                        <th scope="col" hidden>ID</th>
+                        <th scope="col" hidden>ID Tablero</th>
+                        <th scope="col">Nombre</th>
+                        <th scope="col">Estado</th>
+                        <th scope="col">Descripcion</th>
+                        <th scope="col">Color</th>
+                        <th scope="col" hidden>Id Usuario Asignado</th>
+                        <th scope="col">Usuario asignado</th>
+                        <th scope="col">Actualizar Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var tarea in Model.TareasAsignadas)
                     {
-                        <td>sin asignar</td>
+                        <tr>
+                            <td hidden>@tarea.Id</td>
+                            <td hidden>@tarea.Id_tablero</td>
+                            <td>@tarea.Nombre</td>
+                            <td>@tarea.EstadoTarea</td>
+                            <td>@tarea.Descripcion</td>
+                            <td>
+                                <input type="color" asp-for="@tarea.Color" name="colorInput" value="@tarea.Color" disabled>
+                            </td>
+                            <td hidden>
+                                @tarea.Id_usuario_asignado
+                            </td>
+                            @if (string.IsNullOrEmpty(@tarea.Usuario_asignado))
+                            {
+                                <td>sin asignar</td>
+                            }
+                            else
+                            {
+                                <td>@tarea.Usuario_asignado</td>
+                            }
+                            <td>
+                                <form asp-controller="Tarea" asp-action="UpdateEstadoTareaAsignada" method="post">
+                                    <div class="d-flex align-items-center">
+                                        <div>
+                                            <input type="hidden" name="idUsuarioAsignado" value="@tarea.Id_usuario_asignado" />
+                                            <input type="hidden" name="idTarea" value="@tarea.Id" />
+                                            <select name="EstadoTarea" class="form-select form-select-sm">
+                                                <option value="" disabled selected> Seleccionar </option>
+                                                <option value="0">ToDo</option>
+                                                <option value="1">Doing</option>
+                                                <option value="2">Review</option>
+                                                <option value="3">Done</option>
+                                            </select>
+                                        </div>
+                                        <div class="mx-2">
+                                            <button type="submit" class="btn btn-success">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                    fill="currentColor" class="bi bi-upload" viewBox="0 0 16 16">
+                                                    <path
+                                                        d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5" />
+                                                    <path
+                                                        d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708z" />
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </td>
+                        </tr>
                     }
-                    else
-                    {
-                        <td>@tarea.Usuario_asignado</td>
-                    }
-                    <td>
-                        <form asp-controller="Tarea" asp-action="UpdateEstadoTareaAsignada" method="post">
-                            <div class="d-flex align-items-center">
-                                <div>
-                                    <input type="hidden" name="idUsuarioAsignado" value="@tarea.Id_usuario_asignado" />
-                                    <input type="hidden" name="idTarea" value="@tarea.Id" />
-                                    <select name="EstadoTarea" class="form-select form-select-lg">
-                                        <option value="" disabled selected> Seleccionar </option>
-                                        <option value="0">ToDo</option>
-                                        <option value="1">Doing</option>
-                                        <option value="2">Review</option>
-                                        <option value="3">Done</option>
-                                    </select>
-                                </div>
-                                <div class="mx-2">
-                                    <button type="submit" class="btn btn-success">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                            class="bi bi-upload" viewBox="0 0 16 16">
-                                            <path
-                                                d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5" />
-                                            <path
-                                                d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708z" />
-                                        </svg>
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
 
-
-@section Scripts {
+@section Scripts
+{
     <partial name="_ValidationScriptsPartial" />
 }
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var mensajeTemporal = document.getElementById('mensajeTemporal');
+        if (mensajeTemporal) {
+            setTimeout(function () {
+                mensajeTemporal.classList.add('mensaje-oculto');
+            }, 5000);
+        }
+    });
+</script>

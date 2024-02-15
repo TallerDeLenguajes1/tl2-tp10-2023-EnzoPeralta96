@@ -1,17 +1,11 @@
-@model ViewModels.UpdateTareaViewModels;
+@model ViewModels.CreateTareaViewModels;
 
 <div class="border border-primary border-3 p-3 rounded contenedor-form">
-    <h2>Modificar tarea</h2>
+    <h2>Agregar tarea al tablero</h2>
 
     <p>Ingrese los siguientes datos:</p>
 
-    <form asp-controller="Tarea" asp-action="Update">
-
-        <div class="mb-3">
-            <input asp-for="@Model.Id" class="form-control">
-            <span asp-validation-for="@Model.Id" class="text-danger"></span>
-        </div>
-
+    <form asp-controller="Tablero" asp-action="AddTarea">
         <div class="mb-3">
             <input asp-for="@Model.Id_tablero" class="form-control">
             <span asp-validation-for="@Model.Id_tablero" class="text-danger"></span>
@@ -44,18 +38,16 @@
             <span asp-validation-for="@Model.Color" class="text-danger"></span>
         </div>
 
-        <div class="mb-3">
-            <input asp-for="@Model.Id_usuario_asignado">
-        </div>
-
         <div class="contenedor-boton">
-            <button type="submit" class="btn btn-primary">Modificar</button>
-            <a asp-controller="Tarea" asp-action="Index" class="btn btn-danger">
+            <button type="submit" class="btn btn-primary">Agregar</button>
+            <a asp-controller="Tablero" asp-action="Index" class="btn btn-danger">
                 Cancelar
             </a>
         </div>
+
     </form>
 </div>
+
 
 
 <script>

@@ -17,8 +17,9 @@
 
 <body>
     <header>
-        <!-- -->
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <!-- class="navbar navbar-expand-lg navbar-light bg-light"-->
+        <!-- class="navbar navbar-expand-lg navbar-dark bg-dark" -->
+        <nav class="navbar navbar-expand-lg navbar-dark custom-bg-dark">
             <div class="container-fluid">
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
@@ -41,13 +42,17 @@
                                 <ul class="dropdown-menu">
                                     <li>
                                         <a class="dropdown-item" asp-area="" asp-controller="Usuario" asp-action="Index">
-                                            Ver usuario
+                                            Mi usuario
                                         </a>
                                     </li>
                                     @if (IsAdmin)
                                     {
                                         <li>
                                             <hr class="dropdown-divider">
+                                        </li>
+                                         <li>
+                                            <a class="dropdown-item" asp-area="" asp-controller="Usuario"
+                                                asp-action="AllUsers">Todos los usuarios</a>
                                         </li>
                                         <li>
                                             <a class="dropdown-item" asp-area="" asp-controller="Usuario"
@@ -63,8 +68,12 @@
                                 </a>
                                 <ul class="dropdown-menu">
                                     <li>
-                                        <a class="dropdown-item" asp-area="" asp-controller="Tablero" asp-action="Index">Ver
-                                            tableros</a>
+                                        <a class="dropdown-item" asp-area="" asp-controller="Tablero" asp-action="Index">
+                                            Tableros propios</a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" asp-area="" asp-controller="Tablero" asp-action="TablerosRemaining">
+                                            Tableros Restantes</a>
                                     </li>
                                     <li>
                                         <hr class="dropdown-divider">
@@ -82,13 +91,20 @@
                                 </a>
                                 <ul class="dropdown-menu">
                                     <li>
-                                        <a class="dropdown-item" asp-area="" asp-controller="Tarea" asp-action="Index">Ver
+                                        <a class="dropdown-item" asp-area="" asp-controller="Tarea" asp-action="Index">Mis
                                             tareas</a>
                                     </li>
                                      <li>
                                         <a class="dropdown-item" asp-area="" asp-controller="Tarea" asp-action="TareasAsignadas">
                                             Tareas asignadas</a>
                                     </li>
+                                    @if(IsAdmin)
+                                    {
+                                        <li>
+                                            <a class="dropdown-item" asp-area="" asp-controller="Tarea" asp-action="AllTareas">
+                                            Tareas</a>
+                                        </li>
+                                    }
                                     <li>
                                         <hr class="dropdown-divider">
                                     </li>
@@ -104,13 +120,12 @@
                         <li class="nav-item">
                             @if (string.IsNullOrEmpty(IsLogged))
                             {
-                                <a class="nav-link" asp-area="" asp-controller="Login" asp-action="Index">Iniciar sesión</a>
+                                <a class="btn btn-outline-light" asp-area="" asp-controller="Login" asp-action="Index">Iniciar sesión</a>
                             }
                             else
                             {
-                                <a class="nav-link" asp-area="" asp-controller="Login" asp-action="LogOut">Cerrar sesión</a>
+                                <a class="btn btn-outline-light" asp-area="" asp-controller="Login" asp-action="LogOut">Cerrar sesión</a>
                             }
-
                         </li>
                     </ul>
                 </div>
@@ -118,15 +133,15 @@
         </nav>
     </header>
 
-    <div class="container" id="contenedor-main">
+    <div id="contenedor-main">
         <main role="main">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2023 - tl2_tp10_2023_EnzoPeralta96 - <a asp-area="" asp-controller="Home"
+    <footer class="footer text-muted">
+        <div>
+            &copy; 2023 - Proyecto Kanban - <a asp-area="" asp-controller="Home"
                 asp-action="Privacy">Privacy</a>
         </div>
     </footer>

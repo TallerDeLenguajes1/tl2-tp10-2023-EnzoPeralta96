@@ -10,6 +10,7 @@ using tl2_tp10_2023_EnzoPeralta96.Models.Tablero;
 using tl2_tp10_2023_EnzoPeralta96.Repository.Usuario;
 using tl2_tp10_2023_EnzoPeralta96.Repository.Tablero;
 using tl2_tp10_2023_EnzoPeralta96.Repository.Tarea;
+using System.Data.Entity.Core.Common.EntitySql;
 
 namespace tl2_tp10_2023_EnzoPeralta96.Controllers;
 
@@ -20,8 +21,8 @@ public class TareaController : HelperController
     private readonly IUsuarioRepository _usuarioRepository;
     private readonly ITableroRepository _tableroRepository;
 
-    public TareaController(ILogger<TareaController> logger, ITareaRepository tareaRepository, IUsuarioRepository usuarioRepository, ITableroRepository tableroRepository):
-    base(logger,usuarioRepository)
+    public TareaController(ILogger<TareaController> logger, ITareaRepository tareaRepository, IUsuarioRepository usuarioRepository, ITableroRepository tableroRepository) :
+    base(logger, usuarioRepository,tableroRepository)
     {
         _logger = logger;
         _tareaRepository = tareaRepository;
@@ -35,13 +36,20 @@ public class TareaController : HelperController
         {
             if (!IsLogged()) return RedirectToRoute(new { controller = "Login", action = "Index" });
 
+            TareasByUsuarioViewModels model;
+
             var user = GetUserLogged();
-
             var tareasPropias = _tareaRepository.GetTareasByUsuario(user.Id);
-
             var usuarios = _usuarioRepository.GetAllUsers();
 
-            return View(new TareasByUsuarioViewModels(tareasPropias, usuarios));
+            model = new TareasByUsuarioViewModels(tareasPropias, usuarios)
+            {
+                MensajeExito = TempData["MensajeExito"] as string,
+                MensajeError = TempData["MensajeError"] as string,
+                MensajeAdvertencia = TempData["MensajeAdvertencia"] as string
+            };
+
+            return View(model);
         }
         catch (System.Exception ex)
         {
@@ -56,11 +64,49 @@ public class TareaController : HelperController
         {
             if (!IsLogged()) return RedirectToRoute(new { controller = "Login", action = "Index" });
 
+            TareasByUsuarioViewModels model;
+
             var user = GetUserLogged();
 
             var tareasAsignadas = _tareaRepository.GetTareasAsignadasByUsuario(user.Id);
 
-            return View(new TareasByUsuarioViewModels(tareasAsignadas));
+            model = new TareasByUsuarioViewModels(tareasAsignadas)
+            {
+                MensajeExito = TempData["MensajeExito"] as string,
+                MensajeAdvertencia = TempData["MensajeAdvertencia"] as string
+            };
+
+            return View(model);
+        }
+        catch (System.Exception ex)
+        {
+            _logger.LogError(ex.ToString());
+            return BadRequest();
+        }
+    }
+
+    public IActionResult AllTareas()
+    {
+        try
+        {
+            if (!IsLogged()) return RedirectToRoute(new { controller = "Login", action = "Index" });
+            if (!IsAdmin()) return RedirectToRoute(new { controller = "Home", action = "Index" });
+
+            TareasByUsuarioViewModels model;
+
+            var user = GetUserLogged();
+
+            var tareas = _tareaRepository.GetTareasUsers(user.Id);
+            var usuarios = _usuarioRepository.GetAllUsers();
+
+            model = new TareasByUsuarioViewModels(tareas, usuarios)
+            {
+                MensajeExito = TempData["MensajeExito"] as string,
+                MensajeError = TempData["MensajeError"] as string,
+                MensajeAdvertencia = TempData["MensajeAdvertencia"] as string
+            };
+
+            return View(model);
         }
         catch (System.Exception ex)
         {
@@ -78,8 +124,9 @@ public class TareaController : HelperController
 
             var user = GetUserLogged();
             var tableros = _tableroRepository.GetTableroByUser(user.Id);
-            return View(new CreateTareaViewModels(tableros));
 
+            return tableros.Count() > 0 ?  View(new CreateTareaViewModels(tableros)) : View("Warning");
+      
         }
         catch (System.Exception ex)
         {
@@ -99,6 +146,8 @@ public class TareaController : HelperController
             if (!ModelState.IsValid) return RedirectToAction("Create");
 
             _tareaRepository.Create(tareaVM.Id_tablero, new Tarea(tareaVM));
+
+            TempData["MensajeExito"] = "Tarea " + "<b>" + tareaVM.Nombre + "</b>" + " creada con éxito!";
 
             return RedirectToAction("Index");
         }
@@ -138,11 +187,17 @@ public class TareaController : HelperController
         {
             if (!IsLogged()) return RedirectToRoute(new { controller = "Login", action = "Index" });
 
-            if (!ModelState.IsValid) return RedirectToAction("UpdateTarea", new { idTablero = tareaUpdate.Id_tablero, idTarea = tareaUpdate.Id });
+            if (!ModelState.IsValid) return RedirectToAction("Update", new { idTablero = tareaUpdate.Id_tablero, idTarea = tareaUpdate.Id });
 
-            _tareaRepository.Update(tareaUpdate.Id, new Tarea(tareaUpdate));
+            var tarea = new Tarea(tareaUpdate);
 
-            return RedirectToAction("Index");
+            _tareaRepository.Update(tarea.Id, tarea);
+
+            TempData["MensajeExito"] = "Tarea " + "<b>" + tarea.Nombre + "</b>" + " modificada con éxito!";
+
+            int idUsuario = GetIdPropietarioTarea(tarea);
+
+            return IsOwner(idUsuario) ? RedirectToAction("Index") : RedirectToAction("AllTareas");
         }
         catch (System.Exception ex)
         {
@@ -150,6 +205,8 @@ public class TareaController : HelperController
             return BadRequest();
         }
     }
+
+
 
     [HttpPost]
     public IActionResult UpdateEstadoTarea(int idTablero, int idTarea, int EstadoTarea)
@@ -164,7 +221,9 @@ public class TareaController : HelperController
 
             _tareaRepository.UpdateEstado(idTarea, (Estado)EstadoTarea);
 
-            return RedirectToAction("Index");
+            TempData["MensajeExito"] = "Estado de la tarea actualizado con éxito!";
+
+            return IsOwner(idUsuario) ? RedirectToAction("Index") : RedirectToAction("AllTareas");
         }
         catch (System.Exception ex)
         {
@@ -184,6 +243,8 @@ public class TareaController : HelperController
 
             _tareaRepository.UpdateEstado(idTarea, (Estado)EstadoTarea);
 
+            TempData["MensajeExito"] = "Estado de la tarea actualizado con éxito!";
+
             return RedirectToAction("TareasAsignadas");
         }
         catch (System.Exception ex)
@@ -202,13 +263,19 @@ public class TareaController : HelperController
 
             int idUsuario = _tableroRepository.GetTableroById(idTablero).Id_usuario_propietario;
 
-            //hacer un metodo para controlar el id válido
+            if (!IsAdmin() && !IsOwner(idUsuario)) return RedirectToAction("Index");
 
-            if ((!IsAdmin() && !IsOwner(idUsuario)) || !_usuarioRepository.IsUserValid(idUsuarioAsignado)) return RedirectToAction("Index");
+             if (!_usuarioRepository.IsUserValid(idUsuarioAsignado))
+            {
+                TempData["MensajeAdvertencia"] = "Debe seleccionar un usuario de la lista.";
+                return IsOwner(idUsuario) ? RedirectToAction("Index") : RedirectToAction("AllTareas");
+            }
 
             _tareaRepository.AssignUser(idTarea, idUsuarioAsignado);
 
-            return RedirectToAction("Index");
+            TempData["MensajeExito"] = "Usuario asignado con éxito!";
+
+            return IsOwner(idUsuario) ? RedirectToAction("Index") : RedirectToAction("AllTareas");
         }
         catch (System.Exception ex)
         {
@@ -216,7 +283,6 @@ public class TareaController : HelperController
             return BadRequest();
         }
     }
-
 
     public IActionResult RemoveUser(int id_tablero, int idTarea)
     {
@@ -230,11 +296,12 @@ public class TareaController : HelperController
 
             _tareaRepository.RemoveUser(idTarea);
 
-            return RedirectToAction("Index");
+            TempData["MensajeExito"] = "Usuario removido con éxito!";
+
+            return IsOwner(idUsuario) ? RedirectToAction("Index") : RedirectToAction("AllTareas");
         }
         catch (System.Exception ex)
         {
-
             _logger.LogError(ex.ToString());
             return BadRequest();
         }
@@ -253,13 +320,15 @@ public class TareaController : HelperController
             if (_tareaRepository.TareaConUsuarioAsignado(idTarea))
             {
 
-                TempData["MensajeAlerta"] = "No es posible eliminar";
-                return RedirectToAction("Index");
+                TempData["MensajeError"] = "No es posible eliminar, tarea asignada a un usuario";
+                return IsOwner(idUsuario) ? RedirectToAction("Index") : RedirectToAction("AllTareas");
             }
 
             _tareaRepository.Delete(idTarea);
 
-            return RedirectToAction("Index");
+            TempData["MensajeExito"] = "Tarea eliminada con éxito!";
+
+            return IsOwner(idUsuario) ? RedirectToAction("Index") : RedirectToAction("AllTareas");
         }
         catch (System.Exception ex)
         {

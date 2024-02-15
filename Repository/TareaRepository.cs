@@ -230,6 +230,38 @@ public class TareaRepository : ITareaRepository
         return tareas;
     }
 
+    public List<Tarea> GetTareasUsers(int IdUsuario)
+    {
+        var query = $"SELECT tar.id, tar.id_tablero, tar.nombre, tar.estado, tar.descripcion,tar.color, tar.id_usuario_asignado, usu.nombre_de_usuario AS usuario_asignado, tar.activo FROM tablero tab INNER JOIN tarea tar ON tab.id = tar.id_tablero LEFT JOIN usuario usu ON tar.id_usuario_asignado = usu.id WHERE tab.id_usuario_propietario <> @IdUsuario AND tab.activo = 1 AND tar.activo = 1";
+        var tareas = new List<Tarea>();
+        using (SQLiteConnection conexion = new SQLiteConnection(_cadenaDeConexion))
+        {
+            conexion.Open();
+            var command = new SQLiteCommand(query, conexion);
+            command.Parameters.Add(new SQLiteParameter("@IdUsuario", IdUsuario));
+
+            using (SQLiteDataReader reader = command.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    var tarea = new Tarea
+                    {
+                        Id = Convert.ToInt32(reader["id"]),
+                        Id_tablero = Convert.ToInt32(reader["id_tablero"]),
+                        Nombre = reader["nombre"].ToString(),
+                        EstadoTarea = (Estado)Enum.Parse(typeof(Estado), reader["estado"].ToString()),
+                        Descripcion = reader["descripcion"].ToString(),
+                        Color = reader["color"].ToString(),
+                        Id_usuario_asignado = reader["id_usuario_asignado"] != DBNull.Value ? Convert.ToInt32(reader["id_usuario_asignado"]) : (int?)null,
+                        Usuario_asignado = reader["usuario_asignado"].ToString()
+                    };
+                    tareas.Add(tarea);
+                }
+            }
+            conexion.Close();
+        }
+        return tareas;
+    }
     public List<Tarea> GetTareasAsignadasByUsuario(int IdUsuario)
     {
         var query = $"SELECT tar.id, tar.id_tablero, tar.nombre, tar.estado, tar.descripcion, tar.color, tar.id_usuario_asignado, usu.nombre_de_usuario AS usuario_asignado FROM tarea tar INNER JOIN usuario usu ON tar.id_usuario_asignado = usu.id WHERE tar.id_usuario_asignado = @IdUsuario AND tar.activo = 1";

@@ -35,7 +35,7 @@ public class LoginController : HelperController
                 _logger.LogWarning("Intento de acceso invalido - Usuario:" + loginVM.Usuario + " Clave ingresada: " + loginVM.Password);
                 var loginVMMensaje = new LoginViewModels
                 {
-                    MensajeDeError = "Usuario no válido"
+                    MensajeError = "Usuario no válido"
                 };
                 return View("Index",loginVMMensaje);
             }

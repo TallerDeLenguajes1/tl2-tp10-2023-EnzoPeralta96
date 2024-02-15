@@ -3,10 +3,6 @@
 }
 @model ViewModels.UpdateUserViewModels;
 
-<h2>Modificar usuario</h2>
-
-<p>Ingrese los siguientes datos:</p>
-
 @if (Model.TieneMensajeDeError)
 {
     <div id="mensajeTemporal" class="alert alert-warning">
@@ -14,8 +10,15 @@
     </div>
 }
 
-<div style="border: 1px solid #ccc; padding: 20px; border-radius: 5px;">
+
+<div class="border border-primary border-3 p-3 rounded contenedor-form">
+
+    <h2>Modificar usuario</h2>
+
+    <p>Ingrese los siguientes datos:</p>
+
     <form asp-controller="Usuario" asp-action="Update">
+
         <div class="mb-3">
             <input asp-for="@Model.Id">
             <span asp-validation-for="@Model.Id" class="text-danger"></span>
@@ -33,16 +36,20 @@
             <span asp-validation-for="@Model.Password" class="text-danger"></span>
         </div>
 
-        <button type="submit" class="btn btn-primary">Enviar</button>
+        <div class="contenedor-boton">
+            <button type="submit" class="btn btn-primary">Actualizar</button>
 
-        <a asp-controller="Usuario" asp-action="Index">
-            <button type="button" class="btn btn-danger">
+            <a asp-controller="Usuario" asp-action="Index" class="btn btn-danger">
                 Cancelar
-            </button>
-        </a>
-        
+            </a>
+        </div>
+
+
     </form>
+
 </div>
+
+
 
 
 @section Scripts {
@@ -55,7 +62,7 @@
         if (mensajeTemporal) {
             setTimeout(function () {
                 mensajeTemporal.classList.add('mensaje-oculto');
-            }, 10000);
+            }, 5000);
         }
     });
 </script>

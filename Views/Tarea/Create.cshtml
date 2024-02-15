@@ -1,55 +1,58 @@
 @model ViewModels.CreateTareaViewModels;
 
-<h2>Crear tarea</h2>
+<div class="border border-primary border-3 p-3 rounded contenedor-form">
+    <h2>Crear tarea</h2>
 
-<p>Ingrese los siguientes datos:</p>
+    <p>Ingrese los siguientes datos:</p>
 
-<form asp-controller="Tarea" asp-action="Create" method="post">
+    <form asp-controller="Tarea" asp-action="Create" method="post">
 
-    <div class="mb-3">
-        <label asp-for="@Model.NombreTablero"></label>
-        <select asp-for="@Model.Id_tablero" class="form-control">
-            @foreach (var tablero in Model.Tableros)
-            {
-                <option value="@tablero.Id">@tablero.Nombre</option>
-            }
-        </select>
-        <span asp-validation-for="@Model.NombreTablero" class="text-danger"></span>
-    </div>
+        <div class="mb-3">
+            <label asp-for="@Model.NombreTablero"></label>
+            <select asp-for="@Model.Id_tablero" class="form-control">
+                @foreach (var tablero in Model.Tableros)
+                {
+                    <option value="@tablero.Id">@tablero.Nombre</option>
+                }
+            </select>
+            <span asp-validation-for="@Model.NombreTablero" class="text-danger"></span>
+        </div>
 
-    <div class="mb-3">
-        <label asp-for="@Model.Nombre"></label>
-        <input asp-for="@Model.Nombre" class="form-control" />
-        <span asp-validation-for="@Model.Nombre" class="text-danger"></span>
-    </div>
+        <div class="mb-3">
+            <label asp-for="@Model.Nombre"></label>
+            <input asp-for="@Model.Nombre" class="form-control" />
+            <span asp-validation-for="@Model.Nombre" class="text-danger"></span>
+        </div>
+        
+        <div class="mb-3">
+            <label asp-for="@Model.EstadoTarea"></label>
+            <select asp-for="@Model.EstadoTarea"
+                asp-items="Html.GetEnumSelectList<tl2_tp10_2023_EnzoPeralta96.Models.Tarea.Estado>()"
+                class="form-control"></select>
+            <span asp-validation-for="@Model.EstadoTarea" class="text-danger"></span>
+        </div>
 
+        <div class="mb-3">
+            <label asp-for="@Model.Descripcion"></label>
+            <input asp-for="@Model.Descripcion" class="form-control" />
+            <span asp-validation-for="@Model.Descripcion" class="text-danger"></span>
+        </div>
 
-    <div class="mb-3">
-        <label asp-for="@Model.EstadoTarea"></label>
-        <select asp-for="@Model.EstadoTarea" asp-items="Html.GetEnumSelectList<tl2_tp10_2023_EnzoPeralta96.Models.Tarea.Estado>()" class="form-control"></select>
-        <span asp-validation-for="@Model.EstadoTarea" class="text-danger"></span>
-    </div>
+        <div class="mb-3">
+            <label asp-for="@Model.Color"></label>
+            <input asp-for="@Model.Color" class="form-control" id="stringColor" name="Color" readonly hidden>
+            <input type="color" class="form-control" id="Color" onchange="GuardarColor()">
+            <span asp-validation-for="@Model.Color" class="text-danger"></span>
+        </div>
 
-    <div class="mb-3">
-        <label asp-for="@Model.Descripcion"></label>
-        <input asp-for="@Model.Descripcion" class="form-control" />
-        <span asp-validation-for="@Model.Descripcion" class="text-danger"></span>
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="@Model.Color"></label>
-        <input asp-for="@Model.Color" class="form-control" id="stringColor" name="Color" readonly hidden>
-        <input type="color" class="form-control" id="Color" onchange="GuardarColor()">
-        <span asp-validation-for="@Model.Color" class="text-danger"></span>
-    </div>
-
-    <button type="submit" class="btn btn-primary">Enviar</button>
-    <a asp-controller="Tarea" asp-action="Index">
-        <button type="button" class="btn btn-danger">
-            Cancelar
-        </button>
-    </a>
-</form>
+        <div class="contenedor-boton">
+            <button type="submit" class="btn btn-primary">Enviar</button>
+            <a asp-controller="Tarea" asp-action="Index" class="btn btn-danger">
+                Cancelar
+            </a>
+        </div>
+    </form>
+</div>
 
 <script>
     function GuardarColor() {

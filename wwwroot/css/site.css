@@ -1,63 +1,469 @@
-*{
+* {
   margin: 0;
   padding: 0;
   border: 0;
 }
 
-body {
-  height: 100vh;
-}
-
 html {
   font-size: 14px;
-}
-
-
-
-
-/*Sacar puntos de los enlaces*/
-
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
   position: relative;
   min-height: 100%;
 }
 
-header
-{
-  height: 8vh;
+.btn:focus,
+.btn:active:focus,
+.btn-link.nav-link:focus,
+.form-control:focus,
+.form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #6fa8ce;
 }
 
-
-#contenedor-main
-{
-  height: 85vh;
+.custom-bg-dark {
+  background-color: #200133;
 }
 
-main
-{
+main {
   width: 100%;
-}
-
-footer
-{
-  height: 7vh;
-}
-
-footer div
-{
   height: 100%;
 }
 
+footer {
+  width: 100%;
+  background-color: #200133;
+}
+
+
+footer div {
+  align-items: center;
+}
+
+/*css general js*/
+
 .mensaje-oculto {
   display: none;
+}
+
+/* ------------- css general Login ------------- */
+
+#contenedor-form-login {
+  width: 100%;
+  height: 85vh;
+}
+
+
+.label-login,
+.textoLogin {
+  color: #D4C3DE !important;
+  /*color: #262525 !important;*/
+}
+
+.fondo-form {
+  background-color: #200133;
+  border: solid 0.1em #200133;
+}
+
+.input-login {
+  border-color: #200133 !important;
+}
+
+.border-primary {
+  border-color: #200133 !important;
+}
+
+/* ------------- css mobile  ------------- */
+
+@media (max-width: 767px) {
+  body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+
+  main {
+    flex: 1;
+  }
+
+  html {
+    font-size: 18px;
+  }
+
+  #mensajeTemporal1 {
+    margin: 0 auto;
+    margin-top: 5%;
+    width: 95%;
+  }
+
+  .border-primary {
+    width: 95%;
+    margin: 6% auto;
+    height: auto;
+  }
+
+  .contenedor {
+    width: 95%;
+    margin: 0 auto;
+    padding: 2%;
+  }
+
+  .contenedor h2 {
+    text-align: center;
+  }
+
+  .alert-success,
+  .alert-warning,
+  .alert-danger {
+    margin: 0 auto;
+    margin-top: 5%;
+    width: 95%;
+  }
+
+  .contenedor h2 {
+    margin-top: 3.5%;
+    margin-bottom: 3.5%;
+  }
+
+  .contenedor-form {
+    display: flex;
+    flex-direction: column;
+    width: 95%;
+    height: auto;
+  }
+
+  .contenedor-form h2 {
+    margin-top: 2%;
+    margin-bottom: 2%;
+  }
+
+  .contenedor-form p {
+    padding-top: 6%;
+  }
+
+  .contenedor-form form {
+    width: 95%;
+  }
+
+  .mb-3 label {
+    padding-bottom: 1%;
+  }
+
+  .mb-3 input {
+    padding-top: 1%;
+  }
+
+  .mb-3 input {
+    border: solid 0.1em #200133;
+  }
+
+  .mb-3 select {
+    border: solid 0.1em #200133;
+  }
+
+  .contenedor-boton {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .contenedor-boton button {
+    margin-bottom: 2.5%;
+  }
+
+  .contenedor-boton a {
+    margin-top: 2.5%;
+  }
+
+  /*--------tablas usuaeio-----*/
+  .tabla1 {
+    border-collapse: collapse;
+    width: 95%;
+    margin: 0 auto;
+  }
+
+  .tabla1 th,
+  .tabla1 td {
+    border: 0.1em solid black;
+    padding: 0.5em;
+  }
+
+  .tabla1 td {
+    background-color: white;
+    color: #200133;
+  }
+
+  .tabla1 .tabla1-encabezado {
+    display: none;
+  }
+
+  .tabla1 tr {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1em;
+  }
+
+  .tabla1 td:nth-of-type(1)::before {
+    content: "Id";
+  }
+
+  .tabla1 td:nth-of-type(2)::before {
+    content: "Usuario";
+  }
+
+  .tabla1 td:nth-of-type(3)::before {
+    content: "Contraseña";
+  }
+
+  .tabla1 td:nth-of-type(4)::before {
+    content: "Rol";
+  }
+
+  .tabla1 td:nth-of-type(5)::before {
+    content: "Modificar";
+  }
+
+  .tabla1 td:nth-of-type(6)::before {
+    content: "Eliminar";
+  }
+
+  .tabla1 td::before {
+    display: inline-block;
+    background-color: #D4C3DE;
+    padding: 0.5em;
+    margin-right: 0.5em;
+    width: 50%;
+  }
+
+  /*--------tablas tableros-----*/
+
+  .tabla2, .tabla3 {
+    border-collapse: collapse;
+    width: 95%;
+    margin: 0 auto;
+  }
+
+  .tabla2 th, .tabla2 td, .tabla3 th, .tabla3 td{
+    border: 0.1em solid black;
+    padding: 0.5em;
+  }
+
+  .tabla2 td,.tabla3 td {
+    background-color: white;
+    color: #200133;
+  }
+
+  .tabla2 .tabla2-encabezado,.tabla3 .tabla3-encabezado {
+    display: none;
+  }
+
+  .tabla2 tr,.tabla3 tr {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1em;
+  }
+
+  .tabla2 td:nth-of-type(1)::before,.tabla3 td:nth-of-type(1)::before {
+    content: "Id";
+  }
+
+  .tabla2 td:nth-of-type(2)::before,.tabla3 td:nth-of-type(2)::before {
+    content: "Id prop";
+  }
+
+  .tabla2 td:nth-of-type(3)::before,.tabla3 td:nth-of-type(3)::before {
+    content: "Usuario";
+  }
+
+  .tabla2 td:nth-of-type(4)::before,.tabla3 td:nth-of-type(4)::before {
+    content: "Nombre";
+  }
+
+  .tabla2 td:nth-of-type(5)::before,.tabla3 td:nth-of-type(5)::before {
+    content: "Descripción";
+  }
+
+  .tabla2 td:nth-of-type(6)::before {
+    content: "Agregar";
+  }
+
+  .tabla2 td:nth-of-type(7)::before, .tabla3 td:nth-of-type(6)::before {
+    content: "Ver tareas";
+  }
+
+  .tabla2 td:nth-of-type(8)::before {
+    content: "Editar";
+  }
+
+  .tabla2 td:nth-of-type(9)::before {
+    content: "Eliminar";
+  }
+
+  .tabla2 td::before, .tabla3 td::before{
+    display: inline-block;
+    background-color: #D4C3DE;
+    padding: 0.5em;
+    margin-right: 0.5em;
+    width: 38%;
+  }
+
+  /*--------tablas tareas-----*/
+
+  .ancho-select{
+    width: 30%;
+  }
+
+  .tabla4 {
+    border-collapse: collapse;
+    width: 95%;
+    margin: 0 auto;
+  }
+
+  .tabla4 th,
+  .tabla4 td {
+    border: 0.1em solid black;
+    padding: 0.5em;
+  }
+
+  .tabla4 td {
+    background-color: white;
+    color: #200133;
+  }
+
+  .tabla4 .tabla4-encabezado {
+    display: none;
+  }
+
+  .tabla4 tr {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1em;
+  }
+
+  
+
+  .tabla4 td:nth-of-type(1)::before {
+    content: "Id";
+  }
+
+  .tabla4 td:nth-of-type(2)::before {
+    content: "Id Tab";
+  }
+
+  .tabla4 td:nth-of-type(3)::before {
+    content: "Nombre";
+  }
+
+  .tabla4 td:nth-of-type(4)::before {
+    content: "Estado";
+  }
+
+  .tabla4 td:nth-of-type(5)::before {
+    content: "Descripción";
+  }
+
+  .tabla4 td:nth-of-type(6)::before {
+    content: "Color";
+  }
+
+  .tabla4 td:nth-of-type(7)::before {
+    content: "Id usu asig";
+  }
+
+  .tabla4 td:nth-of-type(8)::before {
+    content: "Asignado";
+  }
+
+  .tabla4 td:nth-of-type(9)::before {
+    content: "Actualizar";
+  }
+
+  .tabla4 td:nth-of-type(10)::before {
+    content: "Asignar";
+  }
+  .tabla4 td:nth-of-type(11)::before {
+    content: "Modificar";
+  }
+  .tabla4 td:nth-of-type(12)::before {
+    content: "Eliminar";
+  }
+
+
+  .tabla4 td::before {
+    display: inline-block;
+    flex-direction: row;
+    background-color: #D4C3DE;
+    padding: 0.6em;
+    margin-right: 0.5em;
+    width: 45%;
+  }
+
+
+
+  footer {
+    flex-shrink: 0;
+    margin-top: auto;
+    padding: 20px;
+    text-align: center;
+  }
+
+}
+
+/* ------------- css desktop  ------------- */
+
+@media (min-width: 768px) {
+
+  body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+
+  header {
+    height: 8vh;
+  }
+
+  #contenedor-main {
+    min-height: 85vh;
+    width: 100%;
+  }
+
+  footer {
+    flex-shrink: 0;
+    margin-top: auto;
+    padding: 0.5%;
+    text-align: center;
+  }
+
+
+
+  html {
+    font-size: 16px;
+  }
+
+  #mensajeTemporal1 {
+    margin: 0 auto;
+    width: 60%;
+  }
+
+  .contenedor {
+    width: 90%;
+    margin: 0 auto;
+    padding: 2%;
+  }
+
+  .border-primary {
+    width: 60%;
+    margin: 2% auto;
+    height: auto;
+  }
+
+  #contenedor-botonLogin {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    padding-top: 2%;
+  }
+
+  .btn-light {
+    width: 50% !important;
+  }
+
 }

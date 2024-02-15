@@ -12,7 +12,7 @@ public class CreateTareaViewModels
     public int Id_tablero { get; set; }
 
 
-    [Display(Name = "Tablero:")]
+    [Display(Name = "Seleccione un tablero:")]
     public string NombreTablero { get; set; }
 
     [Required(ErrorMessage = "Campo requerido")]

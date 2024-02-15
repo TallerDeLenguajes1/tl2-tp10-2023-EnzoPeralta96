@@ -12,6 +12,7 @@ public interface ITareaRepository
     public List<Tarea> GetTareasAsignadasByTablero(int idTablero, int idUsuario);
     public List<Tarea> GetTareasByTablero(int idTablero);
     public List<Tarea> GetTareasByUsuario(int IdUsuario);
+    public List<Tarea> GetTareasUsers(int IdUsuario);
     public List<Tarea> GetTareasAsignadasByUsuario(int IdUsuario);
     public bool UsuarioTieneTareasAsignadas(int idUsuario);
     public bool TareaConUsuarioAsignado(int IdUsuario);
