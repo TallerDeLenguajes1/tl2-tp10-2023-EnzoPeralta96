@@ -1,6 +1,7 @@
 @{
-    bool IsAdmin = Context.Request.HttpContext.Session.GetString("Rol") == "admin";
+     ViewData["Title"] = "Modificar usuario";
 }
+
 @model ViewModels.UpdateUserViewModels;
 
 @if (Model.TieneMensajeDeError)

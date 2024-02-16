@@ -4,12 +4,12 @@
 }
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - tl2_tp10_2023_EnzoPeralta96</title>
+    <title>@ViewData["Title"]</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/tl2_tp10_2023_EnzoPeralta96.styles.css" asp-append-version="true" />
@@ -17,8 +17,6 @@
 
 <body>
     <header>
-        <!-- class="navbar navbar-expand-lg navbar-light bg-light"-->
-        <!-- class="navbar navbar-expand-lg navbar-dark bg-dark" -->
         <nav class="navbar navbar-expand-lg navbar-dark custom-bg-dark">
             <div class="container-fluid">
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -69,11 +67,18 @@
                                 <ul class="dropdown-menu">
                                     <li>
                                         <a class="dropdown-item" asp-area="" asp-controller="Tablero" asp-action="Index">
-                                            Tableros propios</a>
+                                            Mis tableros</a>
                                     </li>
                                     <li>
-                                        <a class="dropdown-item" asp-area="" asp-controller="Tablero" asp-action="TablerosRemaining">
-                                            Tableros Restantes</a>
+                                        @if(IsAdmin)
+                                        {
+                                             <a class="dropdown-item" asp-area="" asp-controller="Tablero" asp-action="TablerosRemaining">
+                                            Tableros de usuarios</a>
+                                        }else{
+                                             <a class="dropdown-item" asp-area="" asp-controller="Tablero" asp-action="TablerosRemaining">
+                                            Tableros asignados</a>
+                                        }
+                                       
                                     </li>
                                     <li>
                                         <hr class="dropdown-divider">
@@ -102,7 +107,7 @@
                                     {
                                         <li>
                                             <a class="dropdown-item" asp-area="" asp-controller="Tarea" asp-action="AllTareas">
-                                            Tareas</a>
+                                            Todas las tareas</a>
                                         </li>
                                     }
                                     <li>
