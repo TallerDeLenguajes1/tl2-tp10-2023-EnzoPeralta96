@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "nUz521PFMLLPZu80FiTuWNpGTxlr+YEDPDoWvbf8Z3o=",
+  "Hash": "w/KqR/ir2gQVjAO3q4YDy5nUmWNXiyI0mGKpEa566NI=",
   "Source": "tl2-tp10-2023-EnzoPeralta96",
   "BasePath": "_content/tl2-tp10-2023-EnzoPeralta96",
   "Mode": "Default",
@@ -83,6 +83,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\favicon.ico"
+    },
+    {
+      "Identity": "C:\\Users\\user\\Documents\\Facultad\\Taller2\\TP10\\tl2-tp10-2023-EnzoPeralta96\\wwwroot\\img\\tablero.png",
+      "SourceId": "tl2-tp10-2023-EnzoPeralta96",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\user\\Documents\\Facultad\\Taller2\\TP10\\tl2-tp10-2023-EnzoPeralta96\\wwwroot\\",
+      "BasePath": "_content/tl2-tp10-2023-EnzoPeralta96",
+      "RelativePath": "img/tablero.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\img\\tablero.png"
     },
     {
       "Identity": "C:\\Users\\user\\Documents\\Facultad\\Taller2\\TP10\\tl2-tp10-2023-EnzoPeralta96\\wwwroot\\js\\site.js",

@@ -1,45 +1,45 @@
 @model ViewModels.LoginViewModels
 
-<div id="contenedor-form-login" class="d-flex flex-column ">
+<div class="contenedor2">
+    <h1>Tablero Kanban</h1>
+
+    <h2>Gestión de tareas</h2>
 
     @if (Model.TieneMensajeError)
     {
-        <div id="mensajeTemporal1" class="alert alert-danger">
+        <div id="mensajeTemporal" class="alert alert-danger mensajes-form">
             @Model.MensajeError
         </div>
     }
-    
-    <div class="border border-primary border-3 p-3 rounded">
 
-        <div class="p-3 fondo-form">
-            
-            <h2 class="textoLogin">Inicio de sesión</h2>
+    <div class="border border-primary border-3 p-3 rounded contenedor-form">
 
-            <p class="textoLogin">Ingrese su usario y contraseña para continuar</p>
+        <h3 class="textoLogin">Inicio de sesión</h3>
 
-            <form asp-controller="Login" asp-action="LoginUser">
-                <div class="mb-3">
-                    <label class="form-label label-login" asp-for="@Model.Usuario"></label>
-                    <input class="form-control input-login" asp-for="@Model.Usuario" />
-                    <span asp-validation-for="@Model.Usuario" class="text-danger"></span>
-                </div>
+        <p class="textoLogin">Ingrese su usario y contraseña para continuar</p>
 
-                <div class="mb-3">
-                    <label class="form-label label-login" asp-for="@Model.Password"></label>
-                    <input class="form-control input-login" asp-for="@Model.Password"/>
-                    <span asp-validation-for="@Model.Password" class="text-danger"></span>
-                </div>
+        <form asp-controller="Login" asp-action="LoginUser">
+            <div class="mb-3">
+                <label class="form-label label-login" asp-for="@Model.Usuario"></label>
+                <input class="form-control input-login" asp-for="@Model.Usuario" />
+                <span asp-validation-for="@Model.Usuario" class="text-danger"></span>
+            </div>
 
-                <!---->
-                <div id="contenedor-botonLogin">
-                    <button type="submit" class="btn btn btn-light w-100 py-2 input-login">Iniciar sesión</button>
-                </div>
-                
+            <div class="mb-3">
+                <label class="form-label label-login" asp-for="@Model.Password"></label>
+                <input class="form-control input-login" asp-for="@Model.Password" />
+                <span asp-validation-for="@Model.Password" class="text-danger"></span>
+            </div>
 
-            </form>
+            <!---->
+            <div id="contenedor-botonLogin">
+                <button type="submit" class="btn btn-outline-dark w-100 py-2 input-login">Iniciar sesión</button>
+            </div>
+        </form>
 
-        </div>
+    </div>
 </div>
+
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
@@ -47,7 +47,7 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        var mensajeTemporal = document.getElementById('mensajeTemporal1');
+        var mensajeTemporal = document.getElementById('mensajeTemporal');
         if (mensajeTemporal) {
             setTimeout(function () {
                 mensajeTemporal.classList.add('mensaje-oculto');

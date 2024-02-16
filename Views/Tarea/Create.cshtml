@@ -41,13 +41,13 @@
         <div class="mb-3">
             <label asp-for="@Model.Color"></label>
             <input asp-for="@Model.Color" class="form-control" id="stringColor" name="Color" readonly hidden>
-            <input type="color" class="form-control" id="Color" onchange="GuardarColor()">
+            <input type="color" class="form-control ancho-color" id="Color" onchange="GuardarColor()">
             <span asp-validation-for="@Model.Color" class="text-danger"></span>
         </div>
 
         <div class="contenedor-boton">
-            <button type="submit" class="btn btn-primary">Enviar</button>
-            <a asp-controller="Tarea" asp-action="Index" class="btn btn-danger">
+            <button type="submit" class="btn btn-dark">Enviar</button>
+            <a asp-controller="Tarea" asp-action="Index" class="btn btn-outline-dark">
                 Cancelar
             </a>
         </div>

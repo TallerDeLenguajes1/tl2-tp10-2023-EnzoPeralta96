@@ -33,7 +33,7 @@
     @if (IsAdmin)
     {
         <div class="table-responsive">
-            <table class="table table-dark tabla2">
+            <table class="table table-hover2 tabla2">
                 <thead>
                     <tr class="tabla2-encabezado">
                         <th scope="col" hidden>ID</th>
@@ -71,7 +71,7 @@
                             <td>
                                 <a asp-controller="TareasByTablero" asp-action="Index" asp-route-idTablero="@tablero.Id"
                                     asp-route-idPropietarioTablero="@tablero.Id_usuario_propietario" title="ver tareas">
-                                    <button type="button" class="btn btn-success">
+                                    <button type="button" class="btn btn-dark">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                             class="bi bi-eye" viewBox="0 0 16 16">
                                             <path
@@ -125,7 +125,7 @@
         else
         {
             <div class="table-responsive">
-                <table class="table table-dark tabla3">
+                <table class="table table-hover2 tabla3">
                     <thead>
                         <tr class="tabla3-encabezado">
                             <th scope="col" hidden>ID</th>
@@ -148,7 +148,7 @@
                                 <td>
                                     <a asp-controller="TareasByTablero" asp-action="TareasAsignadasByTablero"
                                         asp-route-idTablero="@tablero.Id" title="ver tareas">
-                                        <button type="button" class="btn btn-success">
+                                        <button type="button" class="btn btn-dark">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                                 class="bi bi-eye" viewBox="0 0 16 16">
                                                 <path

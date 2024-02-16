@@ -1,8 +1,57 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Inicio";
+    bool IsUserLogged = !string.IsNullOrEmpty(Context.Request.HttpContext.Session.GetString("Autenticado"));
 }
 
-<div class="contenedor">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+@model ViewModels.DatosViewModels;
+
+<div class="contenedor2">
+    <h1>Tablero Kanban</h1>
+    <h2>Gestión de tareas</h2>
+
+    @if (!IsUserLogged)
+    {
+        <figure>
+            <img src="~/img/tablero.png" class=" img-fluid" alt="Tablero con tareas en distintos estados">
+        </figure>
+        <p>Por favor, <a href="/login">inicia sesión</a> para acceder al tablero kanban y gestionar tus tareas.</p>
+    }
+    else
+    {
+        <p>Bienvenid@@ <b>@Model.Usuario</b>, a continuación algunos datos que podrían servirte:</p>
+
+        <table class="table table-hover2 tabla5">
+            <thead>
+                <tr class="tabla5-encabezado">
+                    <th class="ancho2-col" scope="col"># Tareas asignadas</th>
+                    <th scope="col"># ToDo</th>
+                    <th scope="col"># Doing</th>
+                    <th scope="col"># Review</th>
+                    <th scope="col"># Done</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="ancho2-col">
+                        @Model.TareasAsignadas
+                    </td>
+                    <td>
+                        @Model.CantidadToDo
+                    </td>
+                    <td>
+                        @Model.CantidadDoing
+                    </td>
+                    <td>
+                        @Model.CantidadReiview
+                    </td>
+                    <td>
+                        @Model.CantidadDone
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+    }
+
+
 </div>

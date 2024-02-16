@@ -15,11 +15,12 @@ html {
 .btn-link.nav-link:focus,
 .form-control:focus,
 .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #6fa8ce;
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #54a4be;
 }
 
 .custom-bg-dark {
-  background-color: #200133;
+  /*background-color: #200133;*/
+  background-color: #1a0241;
 }
 
 main {
@@ -29,9 +30,10 @@ main {
 
 footer {
   width: 100%;
-  background-color: #200133;
+  background-color: #1a0241;
 }
 
+/**/
 
 footer div {
   align-items: center;
@@ -53,13 +55,12 @@ footer div {
 
 .label-login,
 .textoLogin {
-  color: #D4C3DE !important;
-  /*color: #262525 !important;*/
+  color: #2b2b2b !important;
 }
 
 .fondo-form {
-  background-color: #200133;
-  border: solid 0.1em #200133;
+  background-color: #d2e0ff;
+  border: solid 0.1em #1a0241;
 }
 
 .input-login {
@@ -67,8 +68,23 @@ footer div {
 }
 
 .border-primary {
-  border-color: #200133 !important;
+  /*border-color:  #766693 !important;*/
+  border-color: #1a0241 !important;
 }
+
+.contenedor h1,
+.contenedor h2 {
+  color: #49336f;
+}
+
+.contenedor2 h1,
+.contenedor2 h2 {
+  text-align: center;
+  margin-top: 1%;
+  color: #49336f;
+}
+
+
 
 /* ------------- css mobile  ------------- */
 
@@ -84,13 +100,7 @@ footer div {
   }
 
   html {
-    font-size: 18px;
-  }
-
-  #mensajeTemporal1 {
-    margin: 0 auto;
-    margin-top: 5%;
-    width: 95%;
+    font-size: 20px;
   }
 
   .border-primary {
@@ -105,10 +115,6 @@ footer div {
     padding: 2%;
   }
 
-  .contenedor h2 {
-    text-align: center;
-  }
-
   .alert-success,
   .alert-warning,
   .alert-danger {
@@ -117,9 +123,19 @@ footer div {
     width: 95%;
   }
 
+  .contenedor h1 {
+    text-align: center;
+  }
+
   .contenedor h2 {
     margin-top: 3.5%;
     margin-bottom: 3.5%;
+    text-align: center;
+  }
+
+
+  .textoLogin {
+    margin: 0 auto;
   }
 
   .contenedor-form {
@@ -127,52 +143,73 @@ footer div {
     flex-direction: column;
     width: 95%;
     height: auto;
+    border-radius: 2.5% !important;
   }
 
   .contenedor-form h2 {
     margin-top: 2%;
     margin-bottom: 2%;
+    /*color:#3e3a46 ;*/
+    color: #49336f;
   }
 
   .contenedor-form p {
     padding-top: 6%;
+    margin-bottom: 3%;
+    color: #49336f;
   }
 
   .contenedor-form form {
     width: 95%;
+
   }
 
   .mb-3 label {
-    padding-bottom: 1%;
+    margin-bottom: 0.25%;
+    color: #262529;
+
   }
 
   .mb-3 input {
-    padding-top: 1%;
-  }
-
-  .mb-3 input {
-    border: solid 0.1em #200133;
+    margin-top: 0.25%;
+    border: solid 0.1em #1b004b;
+    background-color: #c4f0e7;
   }
 
   .mb-3 select {
-    border: solid 0.1em #200133;
+    border: solid 0.1em #1b004b;
+    background-color: #c4f0e7;
+  }
+
+  .border-primary {
+    border-color: #1b004b !important;
   }
 
   .contenedor-boton {
     display: flex;
     flex-direction: column;
     justify-content: center;
+
   }
 
   .contenedor-boton button {
     margin-bottom: 2.5%;
+    border-color: #1b004b !important;
   }
 
   .contenedor-boton a {
     margin-top: 2.5%;
+    border-color: #1b004b !important;
+  }
+
+  .ancho-color {
+    width: 45% !important;
+    padding-top: 1.5%;
+    padding-bottom: 1.5%;
   }
 
   /*--------tablas usuaeio-----*/
+
   .tabla1 {
     border-collapse: collapse;
     width: 95%;
@@ -181,7 +218,7 @@ footer div {
 
   .tabla1 th,
   .tabla1 td {
-    border: 0.1em solid black;
+    border: 0.1em solid #4c4558;
     padding: 0.5em;
   }
 
@@ -199,6 +236,7 @@ footer div {
     flex-direction: column;
     margin-bottom: 1em;
   }
+
 
   .tabla1 td:nth-of-type(1)::before {
     content: "Id";
@@ -226,7 +264,8 @@ footer div {
 
   .tabla1 td::before {
     display: inline-block;
-    background-color: #D4C3DE;
+    background-color: #a4e4df;
+    border-radius: 0.3em;
     padding: 0.5em;
     margin-right: 0.5em;
     width: 50%;
@@ -234,49 +273,61 @@ footer div {
 
   /*--------tablas tableros-----*/
 
-  .tabla2, .tabla3 {
+  .tabla2,
+  .tabla3 {
     border-collapse: collapse;
     width: 95%;
     margin: 0 auto;
   }
 
-  .tabla2 th, .tabla2 td, .tabla3 th, .tabla3 td{
-    border: 0.1em solid black;
+  .tabla2 th,
+  .tabla2 td,
+  .tabla3 th,
+  .tabla3 td {
+    border: 0.1em solid #4c4558;
     padding: 0.5em;
   }
 
-  .tabla2 td,.tabla3 td {
+  .tabla2 td,
+  .tabla3 td {
     background-color: white;
     color: #200133;
   }
 
-  .tabla2 .tabla2-encabezado,.tabla3 .tabla3-encabezado {
+  .tabla2 .tabla2-encabezado,
+  .tabla3 .tabla3-encabezado {
     display: none;
   }
 
-  .tabla2 tr,.tabla3 tr {
+  .tabla2 tr,
+  .tabla3 tr {
     display: flex;
     flex-direction: column;
     margin-bottom: 1em;
   }
 
-  .tabla2 td:nth-of-type(1)::before,.tabla3 td:nth-of-type(1)::before {
+  .tabla2 td:nth-of-type(1)::before,
+  .tabla3 td:nth-of-type(1)::before {
     content: "Id";
   }
 
-  .tabla2 td:nth-of-type(2)::before,.tabla3 td:nth-of-type(2)::before {
+  .tabla2 td:nth-of-type(2)::before,
+  .tabla3 td:nth-of-type(2)::before {
     content: "Id prop";
   }
 
-  .tabla2 td:nth-of-type(3)::before,.tabla3 td:nth-of-type(3)::before {
+  .tabla2 td:nth-of-type(3)::before,
+  .tabla3 td:nth-of-type(3)::before {
     content: "Usuario";
   }
 
-  .tabla2 td:nth-of-type(4)::before,.tabla3 td:nth-of-type(4)::before {
+  .tabla2 td:nth-of-type(4)::before,
+  .tabla3 td:nth-of-type(4)::before {
     content: "Nombre";
   }
 
-  .tabla2 td:nth-of-type(5)::before,.tabla3 td:nth-of-type(5)::before {
+  .tabla2 td:nth-of-type(5)::before,
+  .tabla3 td:nth-of-type(5)::before {
     content: "Descripción";
   }
 
@@ -284,7 +335,8 @@ footer div {
     content: "Agregar";
   }
 
-  .tabla2 td:nth-of-type(7)::before, .tabla3 td:nth-of-type(6)::before {
+  .tabla2 td:nth-of-type(7)::before,
+  .tabla3 td:nth-of-type(6)::before {
     content: "Ver tareas";
   }
 
@@ -296,17 +348,20 @@ footer div {
     content: "Eliminar";
   }
 
-  .tabla2 td::before, .tabla3 td::before{
+  .tabla2 td::before,
+  .tabla3 td::before {
     display: inline-block;
-    background-color: #D4C3DE;
+    /*background-color: #D4C3DE;*/
+    background-color: #a4e4df;
+    border-radius: 0.5em;
     padding: 0.5em;
     margin-right: 0.5em;
-    width: 38%;
+    width: 50%;
   }
 
   /*--------tablas tareas-----*/
 
-  .ancho-select{
+  .ancho-select {
     width: 30%;
   }
 
@@ -318,7 +373,7 @@ footer div {
 
   .tabla4 th,
   .tabla4 td {
-    border: 0.1em solid black;
+    border: 0.1em solid #4c4558;
     padding: 0.5em;
   }
 
@@ -337,7 +392,7 @@ footer div {
     margin-bottom: 1em;
   }
 
-  
+
 
   .tabla4 td:nth-of-type(1)::before {
     content: "Id";
@@ -378,9 +433,11 @@ footer div {
   .tabla4 td:nth-of-type(10)::before {
     content: "Asignar";
   }
+
   .tabla4 td:nth-of-type(11)::before {
     content: "Modificar";
   }
+
   .tabla4 td:nth-of-type(12)::before {
     content: "Eliminar";
   }
@@ -389,13 +446,73 @@ footer div {
   .tabla4 td::before {
     display: inline-block;
     flex-direction: row;
-    background-color: #D4C3DE;
+    /*background-color: #D4C3DE;*/
+    background-color: #a4e4df;
+    border-radius: 0.5em;
     padding: 0.6em;
     margin-right: 0.5em;
-    width: 45%;
+    width: 50%;
+  }
+
+  /*** Tabla datos ---***/
+  .tabla5 {
+    border-collapse: collapse;
+    width: 95%;
+    margin: 0 auto;
+  }
+
+  .tabla5 th,
+  .tabla5 td {
+    border: 0.1em solid #4c4558;
+    padding: 0.5em;
+  }
+
+  .tabla5 td {
+    background-color: white;
+    color: #200133;
+  }
+
+  .tabla5 .tabla5-encabezado {
+    display: none;
+  }
+
+  .tabla5 tr {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1em;
   }
 
 
+  .tabla5 td:nth-of-type(1)::before {
+    content: "# Tareas asignadas";
+  }
+
+  .tabla5 td:nth-of-type(2)::before {
+    content: "# To-Do";
+  }
+
+  .tabla5 td:nth-of-type(3)::before {
+    content: "# Doing";
+  }
+
+  .tabla5 td:nth-of-type(4)::before {
+    content: "# Review";
+  }
+
+  .tabla5 td:nth-of-type(5)::before {
+    content: "# Done";
+  }
+
+  .tabla5 td::before {
+    display: inline-block;
+    flex-direction: row;
+    /*background-color: #D4C3DE;*/
+    background-color: #a4e4df;
+    border-radius: 0.5em;
+    padding: 0.6em;
+    margin-right: 0.5em;
+    width: 50%;
+  }
 
   footer {
     flex-shrink: 0;
@@ -404,11 +521,41 @@ footer div {
     text-align: center;
   }
 
+  .table-hover tbody tr:hover {
+    background-color: initial !important;
+    /* Cambia el color de fondo cuando pase el mouse por la fila */
+
+  }
+
+  .contenedor2 p{
+    margin: auto;
+    margin-top: 3%;
+    margin-bottom: 3%;
+    width: 95%;
+  }
+
+  .contenedor2 figure{
+    margin-top: 1%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .img-fluid {
+    width: 95%;
+    border-radius: 4%;
+  }
+
+
 }
 
 /* ------------- css desktop  ------------- */
 
 @media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
 
   body {
     display: flex;
@@ -432,12 +579,6 @@ footer div {
     text-align: center;
   }
 
-
-
-  html {
-    font-size: 16px;
-  }
-
   #mensajeTemporal1 {
     margin: 0 auto;
     width: 60%;
@@ -445,9 +586,49 @@ footer div {
 
   .contenedor {
     width: 90%;
-    margin: 0 auto;
+    margin: 0 auto !important;
     padding: 2%;
   }
+
+  .contenedor2{
+    width: 90%;
+  }
+
+  .contenedor2 .tabla5{
+    margin: 0 auto;
+    background-color: rgb(217, 231, 248);
+    width: 75%;
+    text-align:center;
+  }
+
+  .ancho2-col{
+    width: 25%;
+  }
+
+  
+
+  .contenedor2 figure{
+    margin-top: 1.5%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .contenedor2 p{
+    margin-top: 2.5%;
+    margin-bottom: 2.5%;
+    text-align: center;
+  }
+
+  .img-fluid {
+    width: 50%;
+    border-radius: 4%;
+  }
+
+
+
+
 
   .border-primary {
     width: 60%;
@@ -465,5 +646,144 @@ footer div {
   .btn-light {
     width: 50% !important;
   }
+
+  .table-hover2 tbody tr:hover {
+    background-color: #d8e2ef;
+    cursor: pointer;
+  }
+
+  .tabla1,
+  .tabla2,
+  .tabla3,
+  .tabla4,
+  .tabla5 {
+    margin-top: 0.3%;
+    border-radius: 0.7em;
+  }
+
+  .tabla1 {
+    width: 85%;
+    /*background-color: #ebe8e8;*/
+    /*background-color:  #c2def5;*/
+    background-color: rgb(217, 231, 248);
+  }
+
+  .tabla2,
+  .tabla3 {
+    width: 90%;
+    background-color: rgb(217, 231, 248);
+  }
+
+  .tareas-asignadas {
+    width: 90%;
+  }
+
+  .tareas-asignadas .actualizar-estado {
+    width: 20%;
+    text-align: center;
+  }
+
+  .tabla4 {
+    width: 100%;
+    background-color: rgb(217, 231, 248);
+  }
+
+
+  .tabla1 th,
+  .tabla1 td {
+    text-align: center;
+  }
+
+  .tabla2 th,
+  .tabla2 td {
+    text-align: center;
+  }
+
+
+  .tabla3 th,
+  .tabla3 td {
+    text-align: center;
+  }
+
+
+  .tabla4 th,
+  .tabla4 td {
+    text-align: center;
+  }
+
+
+  .tabla1 td,
+  .tabla4 td,
+  .tabla2 td,
+  .tabla3 td {
+    border-color: #b0adad;
+  }
+
+  .alert-success,
+  .alert-warning,
+  .alert-danger {
+    width: max-content;
+    margin-top: 0.5%;
+    margin-bottom: 1%;
+  }
+
+
+  .contenedor-form {
+    margin: 3% auto;
+    background-color: rgb(217, 231, 248);
+    border-radius: 2% !important;
+    width: 40%;
+  }
+
+  .mensajes-form {
+    margin: 2% auto !important;
+  }
+
+
+  .mb-3 label {
+    padding-bottom: 1%;
+  }
+
+  .mb-3 input {
+    padding-top: 1%;
+  }
+
+  .mb-3 input {
+    border: solid 0.1em #766693;
+  }
+
+  .mb-3 select {
+    border: solid 0.1em #766693;
+  }
+
+  .ancho-color {
+    width: 45% !important;
+    padding-top: 1.5%;
+    padding-bottom: 1.5%;
+  }
+
+  .contenedor-boton {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  .contenedor-boton button {
+    width: 30%;
+    margin-right: 2.5%;
+  }
+
+
+  .contenedor-boton a {
+    width: 30%;
+    margin-left: 2.5%;
+  }
+
+
+
+
+
+
+
 
 }

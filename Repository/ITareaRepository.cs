@@ -16,4 +16,7 @@ public interface ITareaRepository
     public List<Tarea> GetTareasAsignadasByUsuario(int IdUsuario);
     public bool UsuarioTieneTareasAsignadas(int idUsuario);
     public bool TareaConUsuarioAsignado(int IdUsuario);
+
+    public int GetCantidadTareasAsignadasByUser(int idUsuario);
+    public int GetCantidadTareasAsignadasByEstado(int idUsuario, int estado);
 }

@@ -13,6 +13,10 @@
       "PackagePath": "staticwebassets\\favicon.ico"
     },
     {
+      "Id": "C:\\Users\\user\\Documents\\Facultad\\Taller2\\TP10\\tl2-tp10-2023-EnzoPeralta96\\wwwroot\\img\\tablero.png",
+      "PackagePath": "staticwebassets\\img\\tablero.png"
+    },
+    {
       "Id": "C:\\Users\\user\\Documents\\Facultad\\Taller2\\TP10\\tl2-tp10-2023-EnzoPeralta96\\wwwroot\\js\\site.js",
       "PackagePath": "staticwebassets\\js\\site.js"
     },

@@ -355,4 +355,43 @@ public class TareaRepository : ITareaRepository
         }
     }
 
+    public int GetCantidadTareasAsignadasByUser(int idUsuario)
+    {
+        var query = $"SELECT COUNT(tar.id) FROM tarea tar INNER JOIN usuario usu ON tar.id_usuario_asignado = usu.id WHERE tar.id_usuario_asignado = @idUsuario AND tar.activo = 1";
+        int count = 0;
+        using (SQLiteConnection conexion = new SQLiteConnection(_cadenaDeConexion))
+        {
+            conexion.Open();
+
+            var command = new SQLiteCommand(query, conexion);
+
+            command.Parameters.Add(new SQLiteParameter("@idUsuario", idUsuario));
+
+            count = Convert.ToInt32(command.ExecuteScalar());
+
+            conexion.Close();
+        }
+        return count;
+    }
+
+    public int GetCantidadTareasAsignadasByEstado(int idUsuario, int estado)
+    {
+        var query = $"SELECT COUNT(tar.id) FROM tarea tar INNER JOIN usuario usu ON tar.id_usuario_asignado = usu.id WHERE tar.id_usuario_asignado = @idUsuario AND tar.estado = @estado AND tar.activo = 1";
+        int count = 0;
+        using (SQLiteConnection conexion = new SQLiteConnection(_cadenaDeConexion))
+        {
+            conexion.Open();
+
+            var command = new SQLiteCommand(query, conexion);
+
+            command.Parameters.Add(new SQLiteParameter("@idUsuario", idUsuario));
+            command.Parameters.Add(new SQLiteParameter("@estado", estado));
+
+            count = Convert.ToInt32(command.ExecuteScalar());
+
+            conexion.Close();
+        }
+        return count;
+    }
+
 }

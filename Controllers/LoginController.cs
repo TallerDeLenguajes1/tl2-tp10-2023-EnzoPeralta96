@@ -30,7 +30,7 @@ public class LoginController : HelperController
 
             var user = _usuarioRepository.UserExists(loginVM.Usuario, loginVM.Password);
 
-            if (user == null) /*Consultar*/
+            if (user == null) 
             {
                 _logger.LogWarning("Intento de acceso invalido - Usuario:" + loginVM.Usuario + " Clave ingresada: " + loginVM.Password);
                 var loginVMMensaje = new LoginViewModels

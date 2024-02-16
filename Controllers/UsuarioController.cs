@@ -61,6 +61,7 @@ public class UsuarioController : HelperController
         }
     }
 
+
     public IActionResult AllUsers()
     {
         try
@@ -73,7 +74,7 @@ public class UsuarioController : HelperController
 
             var user = GetUserLogged();
             var users = _usuarioRepository.GetRestUsers(user.Id);
-            
+
             model = new UsuariosViewModels(user, users)
             {
                 MensajeExito = TempData["MensajeExito"] as string,
@@ -233,6 +234,22 @@ public class UsuarioController : HelperController
         }
         catch (System.Exception ex)
         {
+            _logger.LogError(ex.ToString());
+            return BadRequest();
+        }
+    }
+
+    public IActionResult Redirect(int idUsuario)
+    {
+        try
+        {
+            if (!IsAdmin()) return RedirectToAction("Index");
+
+            return IsOwner(idUsuario) ? RedirectToAction("Index") : RedirectToAction("AllUsers");
+        }
+        catch (System.Exception ex)
+        {
+
             _logger.LogError(ex.ToString());
             return BadRequest();
         }

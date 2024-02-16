@@ -5,7 +5,7 @@
 
 @if (Model.TieneMensajeDeError)
 {
-    <div id="mensajeTemporal" class="alert alert-warning">
+    <div id="mensajeTemporal" class="alert alert-warning mensajes-form">
         @Model.MensajeDeError
     </div>
 }
@@ -37,9 +37,8 @@
         </div>
 
         <div class="contenedor-boton">
-            <button type="submit" class="btn btn-primary">Actualizar</button>
-
-            <a asp-controller="Usuario" asp-action="Index" class="btn btn-danger">
+            <button type="submit" class="btn btn-dark">Modificar</button>
+            <a asp-controller="Usuario" asp-action="Redirect" asp-route-idUsuario ="@Model.Id" class="btn btn-outline-dark">
                 Cancelar
             </a>
         </div>
